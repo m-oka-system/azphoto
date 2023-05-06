@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class='row'>
+  <div class='mt-5 mb-4 col-sm-10 col-md-6 mx-auto '>
+    <div class="text-center">
+      <img src="{% static 'images/icon.png'%}" alt="Icon" width="50">
+      <h3 class="my-4">メールアドレス受信確認用のメールを送信しました</h3>
+      <p>メールに記載されたURLをクリックして、登録を完了してください。</p>
+      <p>受信トレイに確認メールが表示されない場合は、迷惑メールフォルダを確認してください。</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

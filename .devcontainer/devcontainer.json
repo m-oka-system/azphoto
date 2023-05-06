@@ -6,6 +6,10 @@
 	},
 	"workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind",
 	"workspaceFolder": "/app",
+	"runArgs": [
+		"--env-file",
+		".env"
+	],
 	"features": {},
 	"customizations": {
 		"vscode": {

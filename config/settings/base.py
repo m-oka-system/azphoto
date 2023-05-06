@@ -28,6 +28,9 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "django_bootstrap5",
     "django_cleanup",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
 ]
 
 LOCAL_APPS = [
@@ -111,3 +114,21 @@ STATICFILES_DIRS = [str(APPS_DIR / "static")]
 # MEDIA
 MEDIA_ROOT = str(APPS_DIR / "media")
 MEDIA_URL = "/media/"
+
+
+# AUTHENTICATION (django-allauth)
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+LOGIN_REDIRECT_URL = "photo_list"
+ACCOUNT_LOGOUT_REDIRECT_URL = "account_login"
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+SITE_ID = 1

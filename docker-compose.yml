@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      MYSQL_DATABASE: django
+      MYSQL_ROOT_PASSWORD: password
+      DJANGO_SETTINGS_MODULE: config.settings.compose
+      DJANGO_READ_DOT_ENV_FILE: True
+    depends_on:
+      - db
+
+  redis:
+    image: redis:6.0
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+  db:
+    image: mysql:8.0.21
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: django
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+    - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
+  redis_data:

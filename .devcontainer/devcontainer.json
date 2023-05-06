@@ -1,0 +1,47 @@
+{
+	"name": "Django Devcontainer",
+	"build": {
+		"context": "..",
+		"dockerfile": "../Dockerfile"
+	},
+	"workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind",
+	"workspaceFolder": "/app",
+	"features": {},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"alexcvzz.vscode-sqlite",
+				"batisteo.vscode-django",
+				"TabNine.tabnine-vscode",
+				"esbenp.prettier-vscode",
+				"ms-vscode.live-server",
+				"ms-python.flake8",
+				"ms-python.black-formatter",
+				"ms-azuretools.vscode-docker",
+				"hashicorp.terraform"
+			]
+		},
+		"[python]": {
+			// Formatter(black)
+			"editor.formatOnSave": true,
+			"editor.defaultFormatter": "ms-python.black-formatter",
+			// Linter(flake8)
+			"python.linting.enabled": true,
+			"python.linting.lintOnSave": true,
+			"python.linting.pylintEnabled": false,
+			"python.linting.flake8Enabled": true,
+			"python.linting.flake8Args": [
+				"--config=${workspaceFolder}/.flake8"
+			]
+		},
+		"[dockerfile]": {
+			"editor.formatOnSave": true,
+			"editor.defaultFormatter": "ms-azuretools.vscode-docker"
+		},
+		"[terraform]": {
+			"editor.formatOnSave": true,
+			"editor.defaultFormatter": "hashicorp.terraform"
+		}
+	}
+}

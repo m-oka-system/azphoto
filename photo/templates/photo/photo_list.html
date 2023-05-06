@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="d-flex justify-content-between mt-4">
+  {% if photo_count > 0 %}
+  <p>投稿件数：{{ photo_count }} 件</p>
+  {% else %}
+  <p class="text-muted">投稿された写真はありません。</p>
+  {% endif %}
+  <a href="{% url 'photo_create' %}" class="btn btn-outline-primary">新規登録</a>
+</div>
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 py-4">
+  {% for photo in object_list %}
+  <div class="col">
+    <div class="card">
+      <img src="{{ photo.image.url }}" class="card-img-top rounded" alt="" width="300" height="300"
+        style="object-fit: cover" />
+    </div>
+    <div class="d-flex justify-content-end">
+      <a href="{% url 'photo_edit' photo.pk %}">
+        <i class="bi bi-pencil"></i>
+      </a>
+      <a href="{% url 'photo_delete' photo.pk %}" data-bs-toggle="modal" data-bs-target="#delete-Modal-{{ photo.pk }}">
+        <i class=" bi bi-trash ms-3"></i>
+      </a>
+      {% include 'photo/photo_confirm_delete.html' %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

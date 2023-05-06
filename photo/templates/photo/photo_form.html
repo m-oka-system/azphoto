@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class='row'>
+  <div class='mt-5 mb-4 col-sm-10 col-md-4 mx-auto '>
+    {% if 'create' in request.path %}
+    <h1 class="mb-4 text-center">新規登録</h1>
+    {% elif 'edit' in request.path %}
+    <h1 class="mb-4 text-center">更新</h1>
+    {% endif %}
+    <form action="" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      <div class='d-grid mt-3'>
+        <button class='btn btn-primary px-4 mt-4' type='submit'>送信</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

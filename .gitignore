@@ -1,3 +1,4 @@
 # Django app
 db.sqlite3
 .env
+/photo/media/*

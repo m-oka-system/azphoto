@@ -69,11 +69,11 @@ module "redis_pep" {
   env                            = var.env
   resource_group_name            = azurerm_resource_group.rg.name
   location                       = azurerm_resource_group.rg.location
-  resource_name                  = azurerm_redis_cache.app.name
-  private_connection_resource_id = azurerm_redis_cache.app.id
+  resource_name                  = azurerm_redis_cache.redis.name
+  private_connection_resource_id = azurerm_redis_cache.redis.id
   virtual_network_id             = azurerm_virtual_network.spoke1.id
   subnet_id                      = azurerm_subnet.spoke1_endpoint.id
   subresource_names              = ["redisCache"]
-  private_dns_host_name          = azurerm_redis_cache.app.name
+  private_dns_host_name          = azurerm_redis_cache.redis.name
   private_dns_zone_name          = "privatelink.redis.cache.windows.net"
 }

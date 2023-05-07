@@ -1,7 +1,7 @@
 ################################
 # Azure Cache for Redis
 ################################
-resource "azurerm_redis_cache" "app" {
+resource "azurerm_redis_cache" "redis" {
   name                          = "${var.prefix}-${var.env}-redis-${random_integer.num.result}"
   resource_group_name           = azurerm_resource_group.rg.name
   location                      = var.location

@@ -64,12 +64,12 @@ resource "azurerm_key_vault_secret" "azure_client_secret" {
 # Azure Cache for Redis
 resource "azurerm_key_vault_secret" "redis_host" {
   name         = "REDIS-HOST"
-  value        = azurerm_redis_cache.app.hostname
+  value        = azurerm_redis_cache.redis.hostname
   key_vault_id = azurerm_key_vault.app.id
 }
 
 resource "azurerm_key_vault_secret" "redis_key" {
   name         = "REDIS-KEY"
-  value        = azurerm_redis_cache.app.primary_access_key
+  value        = azurerm_redis_cache.redis.primary_access_key
   key_vault_id = azurerm_key_vault.app.id
 }

@@ -73,3 +73,28 @@ resource "azurerm_key_vault_secret" "redis_key" {
   value        = azurerm_redis_cache.redis.primary_access_key
   key_vault_id = azurerm_key_vault.app.id
 }
+
+# Azure Database for MySQL Flexible Server
+resource "azurerm_key_vault_secret" "db_host" {
+  name         = "DB-HOST"
+  value        = azurerm_mysql_flexible_server.mysql.fqdn
+  key_vault_id = azurerm_key_vault.app.id
+}
+
+resource "azurerm_key_vault_secret" "db_name" {
+  name         = "DB-NAME"
+  value        = var.db_name
+  key_vault_id = azurerm_key_vault.app.id
+}
+
+resource "azurerm_key_vault_secret" "db_username" {
+  name         = "DB-USERNAME"
+  value        = var.db_username
+  key_vault_id = azurerm_key_vault.app.id
+}
+
+resource "azurerm_key_vault_secret" "db_password" {
+  name         = "DB-PASSWORD"
+  value        = var.db_password
+  key_vault_id = azurerm_key_vault.app.id
+}

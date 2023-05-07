@@ -76,3 +76,21 @@ variable "redis_capacity" {
   type    = string
   default = 0
 }
+
+# Azure Database for MySQL Flexible Server
+variable "db_name" {
+  type = string
+}
+
+variable "db_username" {
+  type = string
+}
+
+variable "db_password" {
+  type = string
+}
+
+variable "db_size" {
+  type    = string
+  default = "B_Standard_B1s"
+}

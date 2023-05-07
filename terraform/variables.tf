@@ -57,3 +57,8 @@ variable "webappcontainer_roles" {
     "Storage Blob Data Contributor",
   ]
 }
+
+# Azure DNS
+variable "dns_zone_name" {
+  type = string
+}

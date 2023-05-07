@@ -63,6 +63,11 @@ variable "dns_zone_name" {
   type = string
 }
 
+variable "custom_domain_host_name" {
+  type    = string
+  default = "www"
+}
+
 # Azure Cache for Redis
 variable "redis_sku_name" {
   type    = string
@@ -93,4 +98,15 @@ variable "db_password" {
 variable "db_size" {
   type    = string
   default = "B_Standard_B1s"
+}
+
+# Web App for Containers
+variable "container_registry_sku_name" {
+  type    = string
+  default = "Basic"
+}
+
+variable "web_app_sku_name" {
+  type    = string
+  default = "B1"
 }

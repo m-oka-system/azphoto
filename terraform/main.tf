@@ -25,6 +25,10 @@ resource "random_integer" "num" {
   max = 99999
 }
 
+locals {
+  service_fqdn = "${var.custom_domain_host_name}.${var.dns_zone_name}"
+}
+
 resource "azurerm_resource_group" "rg" {
   name     = "${var.prefix}-${var.env}-rg"
   location = var.location

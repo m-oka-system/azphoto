@@ -21,7 +21,10 @@ resource "azurerm_key_vault" "app" {
   }
 }
 
-# Secret
+################################
+# Key Vault secrets
+################################
+# Django app
 resource "azurerm_key_vault_secret" "secret_key" {
   name         = "DJANGO-SECRET-KEY"
   value        = var.secret_key
@@ -55,5 +58,18 @@ resource "azurerm_key_vault_secret" "azure_tenant_id" {
 resource "azurerm_key_vault_secret" "azure_client_secret" {
   name         = "AZURE-CLIENT-SECRET"
   value        = var.azure_client_secret
+  key_vault_id = azurerm_key_vault.app.id
+}
+
+# Azure Cache for Redis
+resource "azurerm_key_vault_secret" "redis_host" {
+  name         = "REDIS-HOST"
+  value        = azurerm_redis_cache.app.hostname
+  key_vault_id = azurerm_key_vault.app.id
+}
+
+resource "azurerm_key_vault_secret" "redis_key" {
+  name         = "REDIS-KEY"
+  value        = azurerm_redis_cache.app.primary_access_key
   key_vault_id = azurerm_key_vault.app.id
 }

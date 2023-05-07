@@ -62,3 +62,17 @@ variable "webappcontainer_roles" {
 variable "dns_zone_name" {
   type = string
 }
+
+# Azure Cache for Redis
+variable "redis_sku_name" {
+  type    = string
+  default = "Basic"
+}
+variable "redis_family" {
+  type    = string
+  default = "C"
+}
+variable "redis_capacity" {
+  type    = string
+  default = 0
+}

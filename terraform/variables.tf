@@ -47,3 +47,13 @@ variable "account_replication_type" {
   type    = string
   default = "LRS"
 }
+
+# Managed ID
+variable "webappcontainer_roles" {
+  type = list(any)
+  default = [
+    "AcrPull",
+    "Key Vault Secrets User",
+    "Storage Blob Data Contributor",
+  ]
+}

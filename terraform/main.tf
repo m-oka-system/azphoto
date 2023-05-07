@@ -61,3 +61,19 @@ module "vault_pep" {
   private_dns_host_name          = azurerm_key_vault.app.name
   private_dns_zone_name          = "privatelink.vaultcore.azure.net"
 }
+
+module "redis_pep" {
+  source = "./modules/private_endpoint"
+
+  prefix                         = var.prefix
+  env                            = var.env
+  resource_group_name            = azurerm_resource_group.rg.name
+  location                       = azurerm_resource_group.rg.location
+  resource_name                  = azurerm_redis_cache.app.name
+  private_connection_resource_id = azurerm_redis_cache.app.id
+  virtual_network_id             = azurerm_virtual_network.spoke1.id
+  subnet_id                      = azurerm_subnet.spoke1_endpoint.id
+  subresource_names              = ["redisCache"]
+  private_dns_host_name          = azurerm_redis_cache.app.name
+  private_dns_zone_name          = "privatelink.redis.cache.windows.net"
+}

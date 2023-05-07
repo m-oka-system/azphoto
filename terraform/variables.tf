@@ -41,3 +41,9 @@ variable "azure_tenant_id" {
 variable "azure_client_secret" {
   type = string
 }
+
+# Azure Storage
+variable "account_replication_type" {
+  type    = string
+  default = "LRS"
+}

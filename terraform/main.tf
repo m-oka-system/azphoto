@@ -20,6 +20,11 @@ provider "azurerm" {
 
 }
 
+resource "random_integer" "num" {
+  min = 10000
+  max = 99999
+}
+
 resource "azurerm_resource_group" "rg" {
   name     = "${var.prefix}-${var.env}-rg"
   location = var.location

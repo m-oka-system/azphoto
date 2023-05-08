@@ -2,6 +2,7 @@
 db.sqlite3
 .env
 /photo/media/*
+django.log*
 
 # Terraform
 terraform.tfvars

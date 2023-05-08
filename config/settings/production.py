@@ -75,3 +75,34 @@ EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 SENDGRID_API_KEY = env("SENDGRID_API_KEY")
 SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 DEFAULT_FROM_EMAIL = SERVER_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL")
+
+
+# LOGGING
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "production": {
+            "format": "%(asctime)s [%(levelname)s] %(process)d %(thread)d "
+            "%(pathname)s:%(lineno)d %(message)s"
+        },
+    },
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": "/app/logs/django.log",
+            "formatter": "production",
+            "when": "D",
+            "backupCount": 7,
+            "encoding": "utf8",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}

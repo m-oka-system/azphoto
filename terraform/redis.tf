@@ -4,7 +4,7 @@
 resource "azurerm_redis_cache" "redis" {
   name                          = "${var.prefix}-${var.env}-redis-${random_integer.num.result}"
   resource_group_name           = azurerm_resource_group.rg.name
-  location                      = var.location
+  location                      = azurerm_resource_group.rg.location
   sku_name                      = var.redis_sku_name
   family                        = var.redis_family
   capacity                      = var.redis_capacity

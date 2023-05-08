@@ -8,7 +8,7 @@ locals {
 resource "azurerm_container_registry" "acr" {
   name                = local.container_registry_name
   resource_group_name = azurerm_resource_group.rg.name
-  location            = var.location
+  location            = azurerm_resource_group.rg.location
   sku                 = var.container_registry_sku_name
   admin_enabled       = false
 }
@@ -19,7 +19,7 @@ resource "azurerm_container_registry" "acr" {
 resource "azurerm_service_plan" "app" {
   name                = "${var.prefix}-${var.env}-plan"
   resource_group_name = azurerm_resource_group.rg.name
-  location            = var.location
+  location            = azurerm_resource_group.rg.location
   os_type             = "Linux"
   sku_name            = var.web_app_sku_name
 }
@@ -27,7 +27,7 @@ resource "azurerm_service_plan" "app" {
 resource "azurerm_linux_web_app" "app" {
   name                      = "${var.prefix}-${var.env}-app-${random_integer.num.result}"
   resource_group_name       = azurerm_resource_group.rg.name
-  location                  = var.location
+  location                  = azurerm_resource_group.rg.location
   service_plan_id           = azurerm_service_plan.app.id
   virtual_network_subnet_id = azurerm_subnet.spoke1_app.id
   https_only                = true
@@ -90,7 +90,7 @@ resource "azurerm_linux_web_app" "app" {
 resource "azurerm_log_analytics_workspace" "app" {
   name                = "${azurerm_linux_web_app.app.name}-logs"
   resource_group_name = azurerm_resource_group.rg.name
-  location            = var.location
+  location            = azurerm_resource_group.rg.location
   sku                 = "PerGB2018"
   retention_in_days   = 30
 }

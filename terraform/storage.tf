@@ -4,7 +4,7 @@
 resource "azurerm_storage_account" "app" {
   name                     = "${var.prefix}${var.env}acc${random_integer.num.result}"
   resource_group_name      = azurerm_resource_group.rg.name
-  location                 = var.location
+  location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
   account_kind             = "StorageV2"
   account_replication_type = var.account_replication_type

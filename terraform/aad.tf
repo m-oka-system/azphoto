@@ -6,7 +6,7 @@ data "azurerm_subscription" "primary" {}
 resource "azurerm_user_assigned_identity" "webappcontainer" {
   name                = "${var.prefix}-${var.env}-webappcontainer-mngid"
   resource_group_name = azurerm_resource_group.rg.name
-  location            = var.location
+  location            = azurerm_resource_group.rg.location
 }
 
 resource "azurerm_role_assignment" "webappcontainer" {

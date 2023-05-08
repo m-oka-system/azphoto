@@ -11,7 +11,11 @@
 		".env"
 	],
 	"features": {
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/devcontainers/features/azure-cli:1": {},
+		"ghcr.io/devcontainers/features/terraform:1": {
+			"vesion": "1.4.5"
+		}
 	},
 	"customizations": {
 		"vscode": {
@@ -49,5 +53,6 @@
 			"editor.formatOnSave": true,
 			"editor.defaultFormatter": "hashicorp.terraform"
 		}
-	}
+	},
+	"postCreateCommand": "sh ./.devcontainer/postCreateCommand.sh"
 }

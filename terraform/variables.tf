@@ -110,3 +110,9 @@ variable "web_app_sku_name" {
   type    = string
   default = "B1"
 }
+
+# Azure Front Door
+variable "frontdoor_sku_name" {
+  type    = string
+  default = "Standard_AzureFrontDoor"
+}

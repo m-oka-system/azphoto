@@ -27,3 +27,18 @@ DATABASES = {
         "PORT": env("DB_PORT"),
     }
 }
+
+
+# CACHES
+REDIS_HOST = env("REDIS_HOST")
+REDIS_PORT = env("REDIS_PORT")
+REDIS_KEY = env("REDIS_KEY")
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": f"rediss://:{REDIS_KEY}@{REDIS_HOST}:{REDIS_PORT}/0",
+    }
+}

@@ -64,3 +64,7 @@ DEFAULT_FILE_STORAGE = "config.settings.custom_storages.MediaAzureStorage"
 MEDIA_URL = (
     f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/{AZURE_MEDIA_CONTAINER}/"
 )
+
+
+# AUTHENTICATION (django-allauth)
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"

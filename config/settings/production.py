@@ -1,5 +1,6 @@
 from .base import *
 from .base import env
+from azure.identity import DefaultAzureCredential
 
 # GENERAL
 DEBUG = env.bool("DJANGO_DEBUG", False)
@@ -42,3 +43,24 @@ CACHES = {
         "LOCATION": f"rediss://:{REDIS_KEY}@{REDIS_HOST}:{REDIS_PORT}/0",
     }
 }
+
+
+# STORAGES
+INSTALLED_APPS += ["storages"]
+AZURE_ACCOUNT_NAME = env("DJANGO_AZURE_ACCOUNT_NAME")
+AZURE_STATIC_CONTAINER = env("DJANGO_AZURE_STATIC_CONTAINER")
+AZURE_MEDIA_CONTAINER = env("DJANGO_AZURE_MEDIA_CONTAINER")
+AZURE_TOKEN_CREDENTIAL = DefaultAzureCredential()
+AZURE_CUSTOM_DOMAIN = env("DJANGO_ALLOWED_HOSTS")
+
+# STATIC
+STATICFILES_STORAGE = "config.settings.custom_storages.StaticAzureStorage"
+STATIC_URL = (
+    f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/{AZURE_STATIC_CONTAINER}/"
+)
+
+# MEDIA
+DEFAULT_FILE_STORAGE = "config.settings.custom_storages.MediaAzureStorage"
+MEDIA_URL = (
+    f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/{AZURE_MEDIA_CONTAINER}/"
+)

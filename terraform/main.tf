@@ -5,6 +5,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "=3.33.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.5.1"
+    }
   }
   cloud {
     organization = "m-oka-system"

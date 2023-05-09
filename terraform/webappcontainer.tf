@@ -54,6 +54,7 @@ resource "azurerm_linux_web_app" "app" {
     "SENDGRID_API_KEY"                    = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.app.name};SecretName=SENDGRID-API-KEY)"
     "DJANGO_DEFAULT_FROM_EMAIL"           = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.app.name};SecretName=DEFAULT-FROM-EMAIL)"
     "DJANGO_SECRET_KEY"                   = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.app.name};SecretName=DJANGO-SECRET-KEY)"
+    "APPINSIGHTS_CONNECTION_STRING"       = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.app.name};SecretName=APPINSIGHTS-CONNECTION-STRING)"
     "AZURE_CLIENT_ID"                     = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.app.name};SecretName=AZURE-CLIENT-ID)"
     "AZURE_TENANT_ID"                     = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.app.name};SecretName=AZURE-TENANT-ID)"
     "AZURE_CLIENT_SECRET"                 = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.app.name};SecretName=AZURE-CLIENT-SECRET)"
@@ -147,4 +148,15 @@ resource "azurerm_monitor_diagnostic_setting" "app" {
       enabled = true
     }
   }
+}
+
+################################
+# Application Insights
+################################
+resource "azurerm_application_insights" "app" {
+  name                = "${azurerm_linux_web_app.app.name}-appinsights"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  application_type    = "web"
+  workspace_id        = azurerm_log_analytics_workspace.app.id
 }

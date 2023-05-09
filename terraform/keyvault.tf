@@ -98,3 +98,10 @@ resource "azurerm_key_vault_secret" "db_password" {
   value        = var.db_password
   key_vault_id = azurerm_key_vault.app.id
 }
+
+# Application insights
+resource "azurerm_key_vault_secret" "appinsights" {
+  name         = "APPINSIGHTS-CONNECTION-STRING"
+  value        = azurerm_application_insights.app.connection_string
+  key_vault_id = azurerm_key_vault.app.id
+}

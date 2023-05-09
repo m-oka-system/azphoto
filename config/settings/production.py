@@ -1,6 +1,8 @@
+import sys
 from .base import *
 from .base import env
 from azure.identity import DefaultAzureCredential
+from opencensus.ext.azure.log_exporter import AzureLogHandler
 
 # GENERAL
 DEBUG = env.bool("DJANGO_DEBUG", False)
@@ -79,3 +81,41 @@ EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 SENDGRID_API_KEY = env("SENDGRID_API_KEY")
 SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 DEFAULT_FROM_EMAIL = SERVER_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL")
+
+
+# LOGGING
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "production": {
+            "format": "%(asctime)s [%(levelname)s] %(process)d %(thread)d "
+            "%(pathname)s:%(lineno)d %(message)s"
+        },
+    },
+    "handlers": {
+        "azure": {
+            "level": "INFO",
+            "class": "opencensus.ext.azure.log_exporter.AzureLogHandler",
+            "connection_string": env("APPINSIGHTS_CONNECTION_STRING"),
+            "formatter": "production",
+        },
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,
+            "formatter": "production",
+        },
+    },
+    "root": {
+        "handlers": ["console", "azure"],
+        "level": "INFO",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", "azure"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}

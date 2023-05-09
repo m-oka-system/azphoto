@@ -68,7 +68,11 @@ MEDIA_URL = (
 
 # AUTHENTICATION (django-allauth)
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-
+ACCOUNT_ADAPTER = "config.accountadapter.CustomAccountAdapter"
+CUSTOM_DOMAIN = f'https://{env("DJANGO_ALLOWED_HOSTS")}'
+CUSTOM_ACCOUNT_CONFIRM_EMAIL_URL = "{domain}/accounts/confirm-email/{{0}}/".format(
+    domain=CUSTOM_DOMAIN
+)
 
 # EMAIL (Twilio SendGrid)
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"

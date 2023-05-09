@@ -77,6 +77,19 @@ resource "azurerm_linux_web_app" "app" {
 
     container_registry_use_managed_identity       = true
     container_registry_managed_identity_client_id = azurerm_user_assigned_identity.webappcontainer.client_id
+
+    ip_restriction {
+      name        = "AllowFrontDoorAddress"
+      priority    = 100
+      action      = "Allow"
+      service_tag = "AzureFrontDoor.Backend"
+      headers = [{
+        x_azure_fdid      = [azurerm_cdn_frontdoor_profile.profile.resource_guid]
+        x_fd_health_probe = null
+        x_forwarded_for   = null
+        x_forwarded_host  = null
+      }]
+    }
   }
 
   lifecycle {

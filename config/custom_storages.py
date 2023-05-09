@@ -1,4 +1,4 @@
-from .base import env
+from config.settings.base import env
 from storages.backends.azure_storage import AzureStorage
 
 

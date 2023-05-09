@@ -56,13 +56,13 @@ AZURE_TOKEN_CREDENTIAL = DefaultAzureCredential()
 AZURE_CUSTOM_DOMAIN = env("DJANGO_ALLOWED_HOSTS")
 
 # STATIC
-STATICFILES_STORAGE = "config.settings.custom_storages.StaticAzureStorage"
+STATICFILES_STORAGE = "config.custom_storages.StaticAzureStorage"
 STATIC_URL = (
     f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/{AZURE_STATIC_CONTAINER}/"
 )
 
 # MEDIA
-DEFAULT_FILE_STORAGE = "config.settings.custom_storages.MediaAzureStorage"
+DEFAULT_FILE_STORAGE = "config.custom_storages.MediaAzureStorage"
 MEDIA_URL = (
     f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/{AZURE_MEDIA_CONTAINER}/"
 )

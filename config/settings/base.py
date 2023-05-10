@@ -134,3 +134,6 @@ ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 SITE_ID = 1
+
+# EMAIL (Console)
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

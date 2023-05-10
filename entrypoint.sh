@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 echo "***** Start SSH server *****"
-service ssh start
+/usr/sbin/sshd
 
 echo "***** Start migrate database *****"
 python manage.py migrate

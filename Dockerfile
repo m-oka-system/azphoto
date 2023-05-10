@@ -1,35 +1,44 @@
-FROM python:3.9.2
+FROM python:3.9.2-alpine
 
-# 環境変数を設定
+# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# 作業ディレクトリを設定
+# Set working directory
 WORKDIR /app
 
-# 依存関係をインストール
+# System dependencies
+RUN apk update && apk add --no-cache \
+  mariadb-connector-c-dev \
+  mysql-client \
+  bind-tools
+
+# Python dependencies
 COPY requirements.txt .
-RUN apt update \
+RUN apk add --no-cache --virtual .build-deps \
+  gcc \
+  musl-dev \
+  libffi-dev \
+  openssl-dev \
   && pip install --upgrade pip \
-  && apt install -y default-mysql-client-core dnsutils
+  && pip install --no-cache-dir -r requirements.txt \
+  && apk del .build-deps
 
-RUN pip install --no-cache-dir -r requirements.txt
-
-# アプリケーションコードをコピー
+# Copy application code
 COPY . .
 
-# Azure App ServiceにSSH接続できるようにする
-ENV SSH_PASSWD "root:Docker!"
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends dialog \
-  && apt-get update \
-  && apt-get install -y --no-install-recommends openssh-server \
-  && echo "$SSH_PASSWD" | chpasswd
+# Configure ssh for Azure App Service
 COPY sshd_config /etc/ssh/
-
 COPY entrypoint.sh /usr/bin/
-RUN chmod +x /usr/bin/entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
+
+RUN apk add openssh \
+  && echo "root:Docker!" | chpasswd \
+  && chmod +x /usr/bin/entrypoint.sh \
+  && cd /etc/ssh/ \
+  && ssh-keygen -A
+
 EXPOSE 8000 2222
+
+ENTRYPOINT ["entrypoint.sh"]
 
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

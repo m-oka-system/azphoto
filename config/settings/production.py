@@ -28,6 +28,10 @@ DATABASES = {
         "USER": env("DB_USERNAME"),
         "PASSWORD": env("DB_PASSWORD"),
         "PORT": env("DB_PORT"),
+        "OPTIONS": {
+            # https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem
+            "ssl": {"ca": str(BASE_DIR / "config/DigiCertGlobalRootCA.crt.pem")}
+        },
     }
 }
 

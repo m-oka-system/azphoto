@@ -41,7 +41,7 @@ resource "azurerm_mysql_flexible_server_configuration" "ssl_config" {
   name                = "require_secure_transport"
   resource_group_name = azurerm_resource_group.rg.name
   server_name         = azurerm_mysql_flexible_server.mysql.name
-  value               = "OFF"
+  value               = "ON"
 }
 
 resource "azurerm_private_dns_zone" "mysql" {

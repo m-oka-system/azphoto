@@ -7,7 +7,6 @@ db.sqlite3
 terraform.tfvars
 .terraform
 .terraformrc
-*.pem
 
 # Githubactions(local debug using act)
 .secrets

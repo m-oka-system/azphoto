@@ -55,9 +55,6 @@ resource "azurerm_linux_web_app" "app" {
     "DJANGO_DEFAULT_FROM_EMAIL"           = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.app.name};SecretName=DEFAULT-FROM-EMAIL)"
     "DJANGO_SECRET_KEY"                   = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.app.name};SecretName=DJANGO-SECRET-KEY)"
     "APPINSIGHTS_CONNECTION_STRING"       = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.app.name};SecretName=APPINSIGHTS-CONNECTION-STRING)"
-    "AZURE_CLIENT_ID"                     = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.app.name};SecretName=AZURE-CLIENT-ID)"
-    "AZURE_TENANT_ID"                     = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.app.name};SecretName=AZURE-TENANT-ID)"
-    "AZURE_CLIENT_SECRET"                 = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.app.name};SecretName=AZURE-CLIENT-SECRET)"
   }
 
   # Use Key Vault references for App Service

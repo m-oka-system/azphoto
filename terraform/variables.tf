@@ -32,16 +32,6 @@ variable "default_from_email" {
   type = string
 }
 
-variable "azure_client_id" {
-  type = string
-}
-variable "azure_tenant_id" {
-  type = string
-}
-variable "azure_client_secret" {
-  type = string
-}
-
 # Azure Storage
 variable "account_replication_type" {
   type    = string

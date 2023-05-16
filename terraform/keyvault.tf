@@ -43,6 +43,12 @@ resource "azurerm_key_vault_secret" "default_from_email" {
   key_vault_id = azurerm_key_vault.app.id
 }
 
+resource "azurerm_key_vault_secret" "webappcontainer_client_id" {
+  name         = "WEBAPPCONTAINER-CLIENT-ID"
+  value        = azurerm_user_assigned_identity.webappcontainer.client_id
+  key_vault_id = azurerm_key_vault.app.id
+}
+
 # Azure Cache for Redis
 resource "azurerm_key_vault_secret" "redis_host" {
   name         = "REDIS-HOST"

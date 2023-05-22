@@ -16,7 +16,8 @@
 		"ghcr.io/devcontainers/features/terraform:1": {
 			"vesion": "1.4.5"
 		},
-		"ghcr.io/devcontainers/features/github-cli:1": {}
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/devcontainers-contrib/features/zsh-plugins:0": {}
 	},
 	"customizations": {
 		"vscode": {

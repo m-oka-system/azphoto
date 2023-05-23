@@ -28,10 +28,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Get runner's Public IP
-        id: ip
-        uses: haythem/public-ip@v1.2
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
@@ -52,8 +48,6 @@ jobs:
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
-        env:
-          TF_VAR_runner_public_ip: ${{ steps.ip.outputs.ipv4 }}
         run: terraform plan -no-color -input=false
         continue-on-error: true
 
@@ -63,6 +57,4 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        env:
-          TF_VAR_runner_public_ip: ${{ steps.ip.outputs.ipv4 }}
         run: terraform apply -auto-approve -input=false

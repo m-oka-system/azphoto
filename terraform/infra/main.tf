@@ -25,17 +25,23 @@ provider "azurerm" {
       prevent_deletion_if_contains_resources = false
     }
   }
-
 }
+
+provider "http" {}
 
 resource "random_integer" "num" {
   min = 10000
   max = 99999
 }
 
+data "http" "ipify" {
+  url = "http://api.ipify.org"
+}
+
 locals {
-  service_fqdn = "${var.custom_domain_host_name}.${var.dns_zone_name}"
-  allowed_cidr = concat(var.client_public_ip, [chomp(var.runner_public_ip)])
+  service_fqdn  = "${var.custom_domain_host_name}.${var.dns_zone_name}"
+  tfc_public_ip = chomp(data.http.ipify.response_body)
+  allowed_cidr  = concat(var.client_public_ip, [local.tfc_public_ip])
 }
 
 resource "azurerm_resource_group" "rg" {

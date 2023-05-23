@@ -27,10 +27,6 @@ variable "client_public_ip" {
   type = list(any)
 }
 
-variable "runner_public_ip" {
-  type = string
-}
-
 # Django app
 variable "secret_key" {
   type = string

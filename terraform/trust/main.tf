@@ -112,6 +112,71 @@ resource "tfe_variable" "azure_tenant_id" {
   sensitive    = true
 }
 
+resource "tfe_variable" "allowed_cidr" {
+  key          = "allowed_cidr"
+  value        = jsonencode(var.allowed_cidr)
+  category     = "terraform"
+  workspace_id = tfe_workspace.infra.id
+  sensitive    = true
+  hcl          = true
+}
+
+resource "tfe_variable" "secret_key" {
+  key          = "secret_key"
+  value        = var.secret_key
+  category     = "terraform"
+  workspace_id = tfe_workspace.infra.id
+  sensitive    = true
+}
+
+resource "tfe_variable" "sendgrid_api_key" {
+  key          = "sendgrid_api_key"
+  value        = var.sendgrid_api_key
+  category     = "terraform"
+  workspace_id = tfe_workspace.infra.id
+  sensitive    = true
+}
+
+resource "tfe_variable" "default_from_email" {
+  key          = "default_from_email"
+  value        = var.default_from_email
+  category     = "terraform"
+  workspace_id = tfe_workspace.infra.id
+  sensitive    = true
+}
+
+resource "tfe_variable" "dns_zone_name" {
+  key          = "dns_zone_name"
+  value        = var.dns_zone_name
+  category     = "terraform"
+  workspace_id = tfe_workspace.infra.id
+  sensitive    = true
+}
+
+resource "tfe_variable" "db_name" {
+  key          = "db_name"
+  value        = var.db_name
+  category     = "terraform"
+  workspace_id = tfe_workspace.infra.id
+  sensitive    = true
+}
+
+resource "tfe_variable" "db_username" {
+  key          = "db_username"
+  value        = var.db_username
+  category     = "terraform"
+  workspace_id = tfe_workspace.infra.id
+  sensitive    = true
+}
+
+resource "tfe_variable" "db_password" {
+  key          = "db_password"
+  value        = var.db_password
+  category     = "terraform"
+  workspace_id = tfe_workspace.infra.id
+  sensitive    = true
+}
+
 ##################################
 # GitHub
 ##################################

@@ -37,3 +37,36 @@ variable "github_token" {
 variable "tfc_encrypted_token" {
   type = string
 }
+
+# Application and Infrastructure
+variable "allowed_cidr" {
+  type = list(any)
+}
+
+variable "secret_key" {
+  type = string
+}
+
+variable "sendgrid_api_key" {
+  type = string
+}
+
+variable "default_from_email" {
+  type = string
+}
+
+variable "dns_zone_name" {
+  type = string
+}
+
+variable "db_name" {
+  type = string
+}
+
+variable "db_username" {
+  type = string
+}
+
+variable "db_password" {
+  type = string
+}

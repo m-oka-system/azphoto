@@ -23,8 +23,12 @@ variable "location" {
   default = "japaneast"
 }
 
-variable "allowed_cidr" {
+variable "client_public_ip" {
   type = list(any)
+}
+
+variable "runner_public_ip" {
+  type = string
 }
 
 # Django app

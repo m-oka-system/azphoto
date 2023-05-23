@@ -15,7 +15,11 @@ resource "azurerm_key_vault" "app" {
   network_acls {
     bypass         = "AzureServices"
     default_action = "Deny"
-    ip_rules       = var.allowed_cidr
+    ip_rules       = local.allowed_cidr
+  }
+
+  lifecycle {
+    ignore_changes = [network_acls[0].ip_rules]
   }
 }
 

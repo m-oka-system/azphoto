@@ -35,6 +35,7 @@ resource "random_integer" "num" {
 
 locals {
   service_fqdn = "${var.custom_domain_host_name}.${var.dns_zone_name}"
+  allowed_cidr = concat(var.client_public_ip, [chomp(var.runner_public_ip)])
 }
 
 resource "azurerm_resource_group" "rg" {

@@ -23,3 +23,17 @@ variable "tfc_workspace_name" {
   type    = string
   default = "azphoto"
 }
+
+# GitHub
+variable "github_repo_name" {
+  type    = string
+  default = "azphoto"
+}
+
+variable "github_token" {
+  type = string
+}
+
+variable "tfc_encrypted_token" {
+  type = string
+}

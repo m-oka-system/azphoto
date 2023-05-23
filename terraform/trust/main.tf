@@ -12,6 +12,10 @@ terraform {
     tfe = {
       version = "~> 0.38.0"
     }
+    github = {
+      source  = "integrations/github"
+      version = "~> 5.25.0"
+    }
   }
 }
 
@@ -20,6 +24,10 @@ provider "azurerm" {
 }
 
 provider "azuread" {}
+
+provider "github" {
+  token = var.github_token
+}
 
 ##################################
 # Azure subscription and Azure AD
@@ -102,4 +110,13 @@ resource "tfe_variable" "azure_tenant_id" {
   category     = "env"
   workspace_id = tfe_workspace.infra.id
   sensitive    = true
+}
+
+##################################
+# GitHub
+##################################
+resource "github_actions_secret" "tf_api_token" {
+  repository      = var.github_repo_name
+  secret_name     = "TF_API_TOKEN"
+  encrypted_value = var.tfc_encrypted_token # gh secret set TF_API_TOKEN --no-store
 }

@@ -33,8 +33,6 @@ resource "random_integer" "num" {
   max = 99999
 }
 
-data "azurerm_subscription" "primary" {}
-
 locals {
   service_fqdn = "${var.custom_domain_host_name}.${var.dns_zone_name}"
 }

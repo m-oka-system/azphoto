@@ -1,13 +1,5 @@
 # Input Variables
 # Common
-variable "subscription_id" {
-  type = string
-}
-
-variable "tenant_id" {
-  type = string
-}
-
 variable "prefix" {
   type    = string
   default = "azphoto"

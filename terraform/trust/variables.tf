@@ -39,7 +39,7 @@ variable "tfc_encrypted_token" {
 }
 
 # Application and Infrastructure
-variable "client_public_ip" {
+variable "allowed_cidr" {
   type = list(any)
 }
 

@@ -1,13 +1,5 @@
 # Input Variables
 # Common
-variable "subscription_id" {
-  type = string
-}
-
-variable "tenant_id" {
-  type = string
-}
-
 variable "prefix" {
   type    = string
   default = "azphoto"
@@ -23,7 +15,7 @@ variable "location" {
   default = "japaneast"
 }
 
-variable "client_public_ip" {
+variable "allowed_cidr" {
   type = list(any)
 }
 

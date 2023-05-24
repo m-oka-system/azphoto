@@ -34,14 +34,6 @@ provider "github" {
 ##################################
 data "azurerm_subscription" "current" {}
 
-locals {
-  tfc_roles = [
-    "Contributor",
-    "Key Vault Administrator",
-    "User Access Administrator"
-  ]
-}
-
 resource "azuread_application" "tfc_application" {
   display_name = "terraform-cloud"
 }
@@ -51,10 +43,9 @@ resource "azuread_service_principal" "tfc_service_principal" {
 }
 
 resource "azurerm_role_assignment" "tfc_role_assignment" {
-  count                = length(local.tfc_roles)
   scope                = data.azurerm_subscription.current.id
   principal_id         = azuread_service_principal.tfc_service_principal.object_id
-  role_definition_name = local.tfc_roles[count.index]
+  role_definition_name = "Contributor"
 }
 
 resource "azuread_application_federated_identity_credential" "tfc_federated_credential_plan" {
@@ -121,9 +112,9 @@ resource "tfe_variable" "azure_tenant_id" {
   sensitive    = true
 }
 
-resource "tfe_variable" "client_public_ip" {
-  key          = "client_public_ip"
-  value        = jsonencode(var.client_public_ip)
+resource "tfe_variable" "allowed_cidr" {
+  key          = "allowed_cidr"
+  value        = jsonencode(var.allowed_cidr)
   category     = "terraform"
   workspace_id = tfe_workspace.infra.id
   sensitive    = true

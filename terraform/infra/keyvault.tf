@@ -1,12 +1,14 @@
 ################################
 # Key Vault
 ################################
+data "azurerm_client_config" "current" {}
+
 resource "azurerm_key_vault" "app" {
   name                       = "${var.prefix}-${var.env}-vault"
   resource_group_name        = azurerm_resource_group.rg.name
   location                   = azurerm_resource_group.rg.location
   sku_name                   = "standard"
-  tenant_id                  = var.tenant_id
+  tenant_id                  = data.azurerm_client_config.current.tenant_id
   enable_rbac_authorization  = true
   purge_protection_enabled   = false
   soft_delete_retention_days = 7
@@ -15,11 +17,7 @@ resource "azurerm_key_vault" "app" {
   network_acls {
     bypass         = "AzureServices"
     default_action = "Deny"
-    ip_rules       = local.allowed_cidr
-  }
-
-  lifecycle {
-    ignore_changes = [network_acls[0].ip_rules]
+    ip_rules       = var.allowed_cidr
   }
 }
 

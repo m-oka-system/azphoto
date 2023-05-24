@@ -11,6 +11,11 @@ resource "azurerm_key_vault" "app" {
   purge_protection_enabled   = false
   soft_delete_retention_days = 7
   access_policy              = []
+
+  network_acls {
+    bypass         = "None"
+    default_action = "Allow"
+  }
 }
 
 ################################

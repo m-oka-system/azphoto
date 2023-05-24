@@ -13,8 +13,8 @@ on:
       - ".github/workflows/terraform.yml"
   workflow_dispatch:
 
-permissions:
-  pull-requests: write
+# permissions:
+#   pull-requests: write
 
 jobs:
   terraform:

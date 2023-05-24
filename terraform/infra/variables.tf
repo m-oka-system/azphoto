@@ -15,10 +15,6 @@ variable "location" {
   default = "japaneast"
 }
 
-variable "allowed_cidr" {
-  type = list(any)
-}
-
 # Django app
 variable "secret_key" {
   type = string

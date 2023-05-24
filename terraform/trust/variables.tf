@@ -39,10 +39,6 @@ variable "tfc_encrypted_token" {
 }
 
 # Application and Infrastructure
-variable "allowed_cidr" {
-  type = list(any)
-}
-
 variable "secret_key" {
   type = string
 }

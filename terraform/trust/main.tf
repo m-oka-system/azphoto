@@ -121,15 +121,6 @@ resource "tfe_variable" "azure_tenant_id" {
   sensitive    = true
 }
 
-resource "tfe_variable" "allowed_cidr" {
-  key          = "allowed_cidr"
-  value        = jsonencode(var.allowed_cidr)
-  category     = "terraform"
-  workspace_id = tfe_workspace.infra.id
-  sensitive    = true
-  hcl          = true
-}
-
 resource "tfe_variable" "secret_key" {
   key          = "secret_key"
   value        = var.secret_key

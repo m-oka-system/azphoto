@@ -11,12 +11,6 @@ resource "azurerm_key_vault" "app" {
   purge_protection_enabled   = false
   soft_delete_retention_days = 7
   access_policy              = []
-
-  network_acls {
-    bypass         = "AzureServices"
-    default_action = "Deny"
-    ip_rules       = var.allowed_cidr
-  }
 }
 
 ################################

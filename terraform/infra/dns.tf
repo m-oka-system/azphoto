@@ -26,3 +26,13 @@ resource "azurerm_dns_cname_record" "afd_cname" {
 
   depends_on = [azurerm_cdn_frontdoor_route.app]
 }
+
+resource "azurerm_dns_txt_record" "webapp_validation" {
+  name                = "asuid.${var.custom_domain_host_name}"
+  zone_name           = azurerm_dns_zone.public.name
+  resource_group_name = azurerm_resource_group.rg.name
+  ttl                 = 3600
+  record {
+    value = azurerm_linux_web_app.app.custom_domain_verification_id
+  }
+}

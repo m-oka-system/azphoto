@@ -96,6 +96,12 @@ resource "azurerm_linux_web_app" "app" {
   }
 }
 
+resource "azurerm_app_service_custom_hostname_binding" "app" {
+  hostname            = local.service_fqdn
+  app_service_name    = azurerm_linux_web_app.app.name
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
 ################################
 # Log Analytics workspace
 ################################

@@ -56,7 +56,7 @@ resource "azurerm_cdn_frontdoor_origin" "app" {
   host_name          = azurerm_linux_web_app.app.default_hostname
   http_port          = 80
   https_port         = 443
-  origin_host_header = azurerm_linux_web_app.app.default_hostname
+  origin_host_header = local.service_fqdn
   priority           = 1
   weight             = 1000
 }

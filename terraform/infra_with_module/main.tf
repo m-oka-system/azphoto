@@ -26,3 +26,10 @@ resource "random_integer" "num" {
   min = 10000
   max = 99999
 }
+
+
+module "resource_group" {
+  source = "./modules/resource_group"
+
+  common = var.common
+}

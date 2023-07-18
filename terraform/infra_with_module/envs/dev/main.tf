@@ -33,3 +33,13 @@ module "resource_group" {
 
   common = var.common
 }
+
+module "storage" {
+  source = "../../modules/storage"
+
+  common              = var.common
+  resource_group_name = module.resource_group.resource_group_name
+  random              = random_integer.num.result
+  storage             = var.storage
+  blob_container      = var.blob_container
+}

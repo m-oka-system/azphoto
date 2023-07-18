@@ -29,7 +29,7 @@ resource "random_integer" "num" {
 
 
 module "resource_group" {
-  source = "./modules/resource_group"
+  source = "../../modules/resource_group"
 
   common = var.common
 }

@@ -1,4 +1,3 @@
-# Common
 variable "common" {
   default = {
     prefix   = "prefix"

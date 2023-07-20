@@ -9,6 +9,7 @@ terraform.tfstate
 terraform.tfstate.backup
 .terraform
 .terraformrc
+.tflint.hcl
 
 # Githubactions(local debug using act)
 .secrets

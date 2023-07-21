@@ -7,6 +7,52 @@ variable "common" {
   }
 }
 
+variable "network" {
+  type = map(object({
+    name          = string
+    address_space = list(string)
+  }))
+  default = {
+    spoke1 = {
+      name          = "spoke1"
+      address_space = ["10.10.0.0/16"]
+    }
+  }
+}
+
+variable "subnet" {
+  default = {
+    app = {
+      name                                      = "app"
+      target_vnet                               = "spoke1"
+      address_prefixes                          = ["10.10.1.0/24"]
+      private_endpoint_network_policies_enabled = false
+      service_delegation = {
+        name    = "Microsoft.Web/serverFarms"
+        actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
+      }
+    }
+    pe = {
+      name                                      = "pe"
+      target_vnet                               = "spoke1"
+      address_prefixes                          = ["10.10.2.0/24"]
+      private_endpoint_network_policies_enabled = true
+      service_delegation                        = {}
+    }
+    db = {
+      name                                      = "db"
+      target_vnet                               = "spoke1"
+      address_prefixes                          = ["10.10.3.0/24"]
+      private_endpoint_network_policies_enabled = false
+      service_delegation = {
+        name    = "Microsoft.DBforMySQL/flexibleServers"
+        actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
+      }
+    }
+  }
+
+}
+
 variable "storage" {
   type = map(object({
     name                          = string

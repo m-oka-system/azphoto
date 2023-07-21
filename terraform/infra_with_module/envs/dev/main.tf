@@ -34,6 +34,15 @@ module "resource_group" {
   common = var.common
 }
 
+module "network" {
+  source = "../../modules/network"
+
+  common              = var.common
+  resource_group_name = module.resource_group.resource_group_name
+  network             = var.network
+  subnet              = var.subnet
+}
+
 module "storage" {
   source = "../../modules/storage"
 

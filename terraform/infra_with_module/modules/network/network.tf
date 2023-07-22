@@ -18,7 +18,7 @@ resource "azurerm_subnet" "this" {
   private_endpoint_network_policies_enabled = each.value.private_endpoint_network_policies_enabled
 
   dynamic "delegation" {
-    for_each = length(each.value.service_delegation) > 0 ? [each.value.service_delegation] : []
+    for_each = lookup(each.value, "service_delegation", null) != null ? [each.value.service_delegation] : []
     content {
       name = "delegation"
       service_delegation {

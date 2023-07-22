@@ -21,6 +21,16 @@ variable "network" {
 }
 
 variable "subnet" {
+  type = map(object({
+    name                                      = string
+    target_vnet                               = string
+    address_prefixes                          = list(string)
+    private_endpoint_network_policies_enabled = bool
+    service_delegation = object({
+      name    = string
+      actions = list(string)
+    })
+  }))
   default = {
     app = {
       name                                      = "app"
@@ -37,7 +47,7 @@ variable "subnet" {
       target_vnet                               = "spoke1"
       address_prefixes                          = ["10.10.2.0/24"]
       private_endpoint_network_policies_enabled = true
-      service_delegation                        = {}
+      service_delegation                        = null
     }
     db = {
       name                                      = "db"
@@ -50,7 +60,6 @@ variable "subnet" {
       }
     }
   }
-
 }
 
 variable "storage" {

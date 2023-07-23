@@ -77,3 +77,12 @@ module "mysql" {
   vnet                = module.network.vnet
   subnet              = module.network.subnet
 }
+
+module "vm" {
+  source = "../../modules/vm"
+
+  common              = var.common
+  resource_group_name = module.resource_group.resource_group_name
+  vm                  = var.vm
+  subnet              = module.network.subnet
+}

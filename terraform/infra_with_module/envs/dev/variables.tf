@@ -59,6 +59,13 @@ variable "subnet" {
         actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
       }
     }
+    vm = {
+      name                                      = "vm"
+      target_vnet                               = "spoke1"
+      address_prefixes                          = ["10.10.4.0/24"]
+      private_endpoint_network_policies_enabled = false
+      service_delegation                        = null
+    }
   }
 }
 
@@ -245,6 +252,31 @@ variable "database" {
       target_mysql_server = "app"
       charset             = "utf8mb4"
       collation           = "utf8mb4_0900_ai_ci"
+    }
+  }
+}
+
+variable "vm" {
+  default = {
+    jumpbox = {
+      name              = "linux-vm"
+      target_subnet     = "vm"
+      vm_size           = "Standard_DS1_v2"
+      vm_admin_username = "azureuser"
+      os_disk_cache     = "ReadWrite"
+      os_disk_type      = "Standard_LRS"
+      os_disk_size      = 30
+      source_image_reference = {
+        offer     = "0001-com-ubuntu-server-focal"
+        publisher = "canonical"
+        sku       = "20_04-lts-gen2"
+        version   = "latest"
+      }
+      public_ip = {
+        sku               = "Standard"
+        allocation_method = "Static"
+        zones             = ["1", "2", "3"]
+      }
     }
   }
 }

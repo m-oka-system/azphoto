@@ -65,3 +65,15 @@ module "keyvault" {
   resource_group_name = module.resource_group.resource_group_name
   keyvault            = var.keyvault
 }
+
+module "mysql" {
+  source = "../../modules/mysql"
+
+  common              = var.common
+  resource_group_name = module.resource_group.resource_group_name
+  random              = random_integer.num.result
+  mysql               = var.mysql
+  database            = var.database
+  vnet                = module.network.vnet
+  subnet              = module.network.subnet
+}

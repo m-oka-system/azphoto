@@ -197,3 +197,54 @@ variable "keyvault" {
     }
   }
 }
+
+variable "mysql" {
+  type = map(object({
+    name                         = string
+    target_vnet                  = string
+    target_subnet                = string
+    db_username                  = string
+    db_password                  = string
+    db_size                      = string
+    version                      = string
+    zone                         = string
+    backup_retention_days        = number
+    geo_redundant_backup_enabled = bool
+    storage = object({
+      auto_grow_enabled = bool
+      iops              = number
+      size_gb           = number
+    })
+  }))
+  default = {
+    app = {
+      name                         = "mysql"
+      target_vnet                  = "spoke1"
+      target_subnet                = "db"
+      db_username                  = "db_username"
+      db_password                  = "db_password"
+      db_size                      = "B_Standard_B1s"
+      version                      = "8.0.21"
+      zone                         = "1"
+      backup_retention_days        = 7
+      geo_redundant_backup_enabled = false
+      storage = {
+        auto_grow_enabled = true
+        iops              = 360
+        size_gb           = 20
+      }
+    }
+  }
+}
+
+variable "database" {
+  type = map(map(string))
+  default = {
+    app = {
+      name                = "MyDatabase"
+      target_mysql_server = "app"
+      charset             = "utf8mb4"
+      collation           = "utf8mb4_0900_ai_ci"
+    }
+  }
+}

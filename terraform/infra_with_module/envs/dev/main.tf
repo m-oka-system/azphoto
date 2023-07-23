@@ -43,6 +43,13 @@ module "network" {
   subnet              = var.subnet
 }
 
+module "dns" {
+  source = "../../modules/dns"
+
+  resource_group_name = module.resource_group.resource_group_name
+  dns                 = var.dns
+}
+
 module "storage" {
   source = "../../modules/storage"
 

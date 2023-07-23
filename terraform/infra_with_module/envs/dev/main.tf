@@ -20,8 +20,6 @@ provider "azurerm" {
   }
 }
 
-data "azurerm_subscription" "primary" {}
-
 resource "random_integer" "num" {
   min = 10000
   max = 99999
@@ -58,4 +56,12 @@ module "storage" {
   random              = random_integer.num.result
   storage             = var.storage
   blob_container      = var.blob_container
+}
+
+module "keyvault" {
+  source = "../../modules/keyvault"
+
+  common              = var.common
+  resource_group_name = module.resource_group.resource_group_name
+  keyvault            = var.keyvault
 }

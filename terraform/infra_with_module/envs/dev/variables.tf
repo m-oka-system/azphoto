@@ -166,3 +166,34 @@ variable "blob_container" {
     }
   }
 }
+
+variable "keyvault" {
+  type = map(object({
+    name                       = string
+    sku_name                   = string
+    enable_rbac_authorization  = bool
+    purge_protection_enabled   = bool
+    soft_delete_retention_days = number
+    network_acls = object({
+      default_action             = string
+      bypass                     = string
+      ip_rules                   = list(string)
+      virtual_network_subnet_ids = list(string)
+    })
+  }))
+  default = {
+    app = {
+      name                       = "app"
+      sku_name                   = "standard"
+      enable_rbac_authorization  = true
+      purge_protection_enabled   = false
+      soft_delete_retention_days = 7
+      network_acls = {
+        default_action             = "Deny"
+        bypass                     = "AzureServices"
+        ip_rules                   = ["100.0.0.1"]
+        virtual_network_subnet_ids = []
+      }
+    }
+  }
+}

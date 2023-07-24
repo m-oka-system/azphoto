@@ -86,3 +86,11 @@ module "vm" {
   vm                  = var.vm
   subnet              = module.network.subnet
 }
+
+module "container_registry" {
+  source = "../../modules/container_registry"
+
+  common              = var.common
+  resource_group_name = module.resource_group.resource_group_name
+  container_registry  = var.container_registry
+}

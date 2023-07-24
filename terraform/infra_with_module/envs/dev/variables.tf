@@ -304,7 +304,6 @@ variable "app_service" {
     os_type       = string
     sku_name      = string
     target_subnet = string
-    target_acr    = string
     https_only    = bool
     site_config = object({
       always_on              = bool

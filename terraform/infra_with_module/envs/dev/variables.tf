@@ -297,3 +297,33 @@ variable "container_registry" {
     }
   }
 }
+
+variable "app_service" {
+  type = map(object({
+    name          = string
+    os_type       = string
+    sku_name      = string
+    target_subnet = string
+    target_acr    = string
+    https_only    = bool
+    site_config = object({
+      always_on              = bool
+      ftps_state             = string
+      vnet_route_all_enabled = bool
+    })
+  }))
+  default = {
+    app = {
+      name          = "app"
+      os_type       = "Linux"
+      sku_name      = "B1"
+      target_subnet = "app"
+      https_only    = true
+      site_config = {
+        always_on              = false
+        ftps_state             = "Disabled"
+        vnet_route_all_enabled = true
+      }
+    }
+  }
+}

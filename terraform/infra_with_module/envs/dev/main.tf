@@ -94,3 +94,12 @@ module "container_registry" {
   resource_group_name = module.resource_group.resource_group_name
   container_registry  = var.container_registry
 }
+
+module "app_service" {
+  source = "../../modules/app_service"
+
+  common              = var.common
+  resource_group_name = module.resource_group.resource_group_name
+  app_service         = var.app_service
+  subnet              = module.network.subnet
+}

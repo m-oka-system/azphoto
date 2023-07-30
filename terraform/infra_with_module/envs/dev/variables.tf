@@ -298,13 +298,23 @@ variable "container_registry" {
   }
 }
 
+variable "service_plan" {
+  type = map(map(string))
+  default = {
+    app = {
+      name     = "app"
+      os_type  = "Linux"
+      sku_name = "B1"
+    }
+  }
+}
+
 variable "app_service" {
   type = map(object({
-    name          = string
-    os_type       = string
-    sku_name      = string
-    target_subnet = string
-    https_only    = bool
+    name                = string
+    target_service_plan = string
+    target_subnet       = string
+    https_only          = bool
     site_config = object({
       always_on              = bool
       ftps_state             = string
@@ -313,11 +323,10 @@ variable "app_service" {
   }))
   default = {
     app = {
-      name          = "app"
-      os_type       = "Linux"
-      sku_name      = "B1"
-      target_subnet = "app"
-      https_only    = true
+      name                = "app"
+      target_service_plan = "app"
+      target_subnet       = "app"
+      https_only          = true
       site_config = {
         always_on              = false
         ftps_state             = "Disabled"

@@ -100,6 +100,7 @@ module "app_service" {
 
   common              = var.common
   resource_group_name = module.resource_group.resource_group_name
+  service_plan        = var.service_plan
   app_service         = var.app_service
   subnet              = module.network.subnet
 }

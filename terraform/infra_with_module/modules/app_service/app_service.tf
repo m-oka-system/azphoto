@@ -2,7 +2,7 @@
 # Web App for Containers
 ################################
 resource "azurerm_service_plan" "this" {
-  for_each            = var.app_service
+  for_each            = var.service_plan
   name                = "${var.common.prefix}-${var.common.env}-${each.value.name}-plan"
   resource_group_name = var.resource_group_name
   location            = var.common.location
@@ -15,7 +15,7 @@ resource "azurerm_linux_web_app" "this" {
   name                      = "${var.common.prefix}-${var.common.env}-${each.value.name}"
   resource_group_name       = var.resource_group_name
   location                  = var.common.location
-  service_plan_id           = azurerm_service_plan.this[each.key].id
+  service_plan_id           = azurerm_service_plan.this[each.value.target_service_plan].id
   virtual_network_subnet_id = var.subnet[each.value.target_subnet].id
   https_only                = each.value.https_only
 

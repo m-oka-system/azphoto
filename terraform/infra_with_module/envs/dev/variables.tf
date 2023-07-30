@@ -407,3 +407,34 @@ variable "frontdoor_route" {
     }
   }
 }
+
+variable "frontdoor_firewall_policy" {
+  default = {
+    app = {
+      name                              = "IPRestrictionPolicy"
+      sku_name                          = "Standard_AzureFrontDoor"
+      mode                              = "Prevention"
+      custom_block_response_status_code = 403
+    }
+  }
+}
+
+variable "frontdoor_firewall_custom_rule" {
+  default = {
+    100 = {
+      rule_name    = "AllowClientIP"
+      priority     = 100
+      match_values = ["100.0.0.1", "100.0.0.2"]
+    }
+  }
+}
+
+variable "frontdoor_security_policy" {
+  default = {
+    app = {
+      name                     = "app"
+      target_frontdoor_profile = "app"
+      target_firewall_policy   = "app"
+    }
+  }
+}

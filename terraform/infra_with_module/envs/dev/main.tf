@@ -108,12 +108,15 @@ module "app_service" {
 module "frontdoor" {
   source = "../../modules/frontdoor"
 
-  common                 = var.common
-  resource_group_name    = module.resource_group.resource_group_name
-  frontdoor              = var.frontdoor
-  frontdoor_endpoint     = var.frontdoor_endpoint
-  frontdoor_origin_group = var.frontdoor_origin_group
-  frontdoor_origin       = var.frontdoor_origin
-  frontdoor_route        = var.frontdoor_route
-  app_service            = module.app_service.app_service
+  common                         = var.common
+  resource_group_name            = module.resource_group.resource_group_name
+  frontdoor                      = var.frontdoor
+  frontdoor_endpoint             = var.frontdoor_endpoint
+  frontdoor_origin_group         = var.frontdoor_origin_group
+  frontdoor_origin               = var.frontdoor_origin
+  frontdoor_route                = var.frontdoor_route
+  frontdoor_security_policy      = var.frontdoor_security_policy
+  frontdoor_firewall_policy      = var.frontdoor_firewall_policy
+  frontdoor_firewall_custom_rule = var.frontdoor_firewall_custom_rule
+  app_service                    = module.app_service.app_service
 }

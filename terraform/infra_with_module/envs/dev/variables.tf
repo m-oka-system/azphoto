@@ -326,3 +326,75 @@ variable "app_service" {
     }
   }
 }
+
+variable "frontdoor" {
+  default = {
+    app = {
+      name                     = "app"
+      sku_name                 = "Standard_AzureFrontDoor"
+      response_timeout_seconds = 60
+    }
+  }
+}
+
+variable "frontdoor_endpoint" {
+  default = {
+    app = {
+      name                     = "app"
+      target_frontdoor_profile = "app"
+    }
+  }
+}
+
+variable "frontdoor_origin_group" {
+  default = {
+    app = {
+      name                                                      = "app"
+      target_frontdoor_profile                                  = "app"
+      session_affinity_enabled                                  = false
+      restore_traffic_time_to_healed_or_new_endpoint_in_minutes = 0
+      health_probe = {
+        interval_in_seconds = 100
+        path                = "/"
+        protocol            = "Https"
+        request_type        = "HEAD"
+      }
+      load_balancing = {
+        additional_latency_in_milliseconds = 50
+        sample_size                        = 4
+        successful_samples_required        = 3
+      }
+    }
+  }
+}
+
+variable "frontdoor_origin" {
+  default = {
+    app = {
+      name                           = "app"
+      target_frontdoor_origin_group  = "app"
+      target_app_service             = "app"
+      certificate_name_check_enabled = true
+      http_port                      = 80
+      https_port                     = 443
+      priority                       = 1
+      weight                         = 1000
+    }
+  }
+}
+
+variable "frontdoor_route" {
+  default = {
+    app = {
+      name                          = "app"
+      target_frontdoor_endpoint     = "app"
+      target_frontdoor_origin_group = "app"
+      target_frontdoor_origin       = "app"
+      forwarding_protocol           = "HttpsOnly"
+      https_redirect_enabled        = true
+      patterns_to_match             = ["/*"]
+      supported_protocols           = ["Http", "Https"]
+      link_to_default_domain        = true
+    }
+  }
+}

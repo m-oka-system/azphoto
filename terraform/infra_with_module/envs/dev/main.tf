@@ -103,3 +103,16 @@ module "app_service" {
   app_service         = var.app_service
   subnet              = module.network.subnet
 }
+
+module "frontdoor" {
+  source = "../../modules/frontdoor"
+
+  common                 = var.common
+  resource_group_name    = module.resource_group.resource_group_name
+  frontdoor              = var.frontdoor
+  frontdoor_endpoint     = var.frontdoor_endpoint
+  frontdoor_origin_group = var.frontdoor_origin_group
+  frontdoor_origin       = var.frontdoor_origin
+  frontdoor_route        = var.frontdoor_route
+  app_service            = module.app_service.app_service
+}

@@ -439,7 +439,7 @@ variable "frontdoor_route" {
       target_frontdoor_origin       = "blob"
       forwarding_protocol           = "HttpsOnly"
       https_redirect_enabled        = true
-      patterns_to_match             = ["/static/*"]
+      patterns_to_match             = ["/media/*", "/static/*"]
       supported_protocols           = ["Http", "Https"]
       link_to_default_domain        = true
     }

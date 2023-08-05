@@ -75,7 +75,7 @@ resource "azurerm_cdn_frontdoor_route" "this" {
   link_to_default_domain = each.value.link_to_default_domain
 
   dynamic "cache" {
-    for_each = lookup(each.value, "cache", {}) != {} ? [each.value.cache] : []
+    for_each = lookup(each.value, "cache", null) != null ? [each.value.cache] : []
 
     content {
       compression_enabled           = cache.value.compression_enabled

@@ -257,6 +257,26 @@ variable "database" {
 }
 
 variable "vm" {
+  type = map(object({
+    name              = string
+    target_subnet     = string
+    vm_size           = string
+    vm_admin_username = string
+    os_disk_cache     = string
+    os_disk_type      = string
+    os_disk_size      = number
+    source_image_reference = object({
+      offer     = string
+      publisher = string
+      sku       = string
+      version   = string
+    })
+    public_ip = object({
+      sku               = string
+      allocation_method = string
+      zones             = list(string)
+    })
+  }))
   default = {
     jumpbox = {
       name              = "linux-vm"
@@ -337,6 +357,11 @@ variable "app_service" {
 }
 
 variable "frontdoor" {
+  type = map(object({
+    name                     = string
+    sku_name                 = string
+    response_timeout_seconds = number
+  }))
   default = {
     app = {
       name                     = "app"
@@ -347,6 +372,10 @@ variable "frontdoor" {
 }
 
 variable "frontdoor_endpoint" {
+  type = map(object({
+    name                     = string
+    target_frontdoor_profile = string
+  }))
   default = {
     app = {
       name                     = "app"
@@ -356,6 +385,23 @@ variable "frontdoor_endpoint" {
 }
 
 variable "frontdoor_origin_group" {
+  type = map(object({
+    name                                                      = string
+    target_frontdoor_profile                                  = string
+    session_affinity_enabled                                  = bool
+    restore_traffic_time_to_healed_or_new_endpoint_in_minutes = number
+    health_probe = object({
+      interval_in_seconds = number
+      path                = string
+      protocol            = string
+      request_type        = string
+    })
+    load_balancing = object({
+      additional_latency_in_milliseconds = number
+      sample_size                        = number
+      successful_samples_required        = number
+    })
+  }))
   default = {
     app = {
       name                                                      = "app"
@@ -395,6 +441,16 @@ variable "frontdoor_origin_group" {
 }
 
 variable "frontdoor_origin" {
+  type = map(object({
+    name                           = string
+    target_frontdoor_origin_group  = string
+    target_backend_origin          = string
+    certificate_name_check_enabled = bool
+    http_port                      = number
+    https_port                     = number
+    priority                       = number
+    weight                         = number
+  }))
   default = {
     app = {
       name                           = "app"
@@ -420,6 +476,23 @@ variable "frontdoor_origin" {
 }
 
 variable "frontdoor_route" {
+  type = map(object({
+    name                          = string
+    target_frontdoor_endpoint     = string
+    target_frontdoor_origin_group = string
+    target_frontdoor_origin       = string
+    forwarding_protocol           = string
+    https_redirect_enabled        = bool
+    patterns_to_match             = list(string)
+    supported_protocols           = list(string)
+    link_to_default_domain        = bool
+    cache = object({
+      compression_enabled           = bool
+      query_string_caching_behavior = string
+      query_strings                 = list(string)
+      content_types_to_compress     = list(string)
+    })
+  }))
   default = {
     app = {
       name                          = "app"
@@ -431,7 +504,7 @@ variable "frontdoor_route" {
       patterns_to_match             = ["/*"]
       supported_protocols           = ["Http", "Https"]
       link_to_default_domain        = true
-      cache                         = {}
+      cache                         = null
     }
     blob = {
       name                          = "blob"
@@ -454,6 +527,12 @@ variable "frontdoor_route" {
 }
 
 variable "frontdoor_firewall_policy" {
+  type = map(object({
+    name                              = string
+    sku_name                          = string
+    mode                              = string
+    custom_block_response_status_code = number
+  }))
   default = {
     app = {
       name                              = "IPRestrictionPolicy"
@@ -465,6 +544,11 @@ variable "frontdoor_firewall_policy" {
 }
 
 variable "frontdoor_firewall_custom_rule" {
+  type = map(object({
+    rule_name    = string
+    priority     = number
+    match_values = list(string)
+  }))
   default = {
     clientip = {
       rule_name    = "AllowClientIP"
@@ -475,6 +559,11 @@ variable "frontdoor_firewall_custom_rule" {
 }
 
 variable "frontdoor_security_policy" {
+  type = map(object({
+    name                     = string
+    target_frontdoor_profile = string
+    target_firewall_policy   = string
+  }))
   default = {
     app = {
       name                     = "app"

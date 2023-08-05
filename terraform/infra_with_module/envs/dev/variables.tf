@@ -431,6 +431,7 @@ variable "frontdoor_route" {
       patterns_to_match             = ["/*"]
       supported_protocols           = ["Http", "Https"]
       link_to_default_domain        = true
+      cache                         = {}
     }
     blob = {
       name                          = "blob"
@@ -442,6 +443,12 @@ variable "frontdoor_route" {
       patterns_to_match             = ["/media/*", "/static/*"]
       supported_protocols           = ["Http", "Https"]
       link_to_default_domain        = true
+      cache = {
+        compression_enabled           = true
+        query_string_caching_behavior = "IgnoreQueryString"
+        query_strings                 = []
+        content_types_to_compress     = ["text/html", "text/css", "text/javascript"]
+      }
     }
   }
 }

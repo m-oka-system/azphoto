@@ -73,6 +73,17 @@ resource "azurerm_cdn_frontdoor_route" "this" {
 
   # cdn_frontdoor_custom_domain_ids = [azurerm_cdn_frontdoor_custom_domain.app.id]
   link_to_default_domain = each.value.link_to_default_domain
+
+  dynamic "cache" {
+    for_each = lookup(each.value, "cache", {}) != {} ? [each.value.cache] : []
+
+    content {
+      compression_enabled           = cache.value.compression_enabled
+      query_string_caching_behavior = cache.value.query_string_caching_behavior
+      query_strings                 = cache.value.query_strings
+      content_types_to_compress     = cache.value.content_types_to_compress
+    }
+  }
 }
 
 # # Web Application Firewall

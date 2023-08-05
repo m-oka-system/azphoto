@@ -572,3 +572,20 @@ variable "frontdoor_security_policy" {
     }
   }
 }
+
+variable "user_assigned_identity" {
+  type = map(object({
+    name                  = string
+    role_definition_names = list(string)
+  }))
+  default = {
+    app = {
+      name = "app"
+      role_definition_names = [
+        "AcrPull",
+        "Key Vault Secrets User",
+        "Storage Blob Data Contributor",
+      ]
+    }
+  }
+}

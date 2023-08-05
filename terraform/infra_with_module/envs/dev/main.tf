@@ -20,6 +20,8 @@ provider "azurerm" {
   }
 }
 
+data "azurerm_subscription" "primary" {}
+
 resource "random_integer" "num" {
   min = 10000
   max = 99999
@@ -133,4 +135,13 @@ module "frontdoor" {
   frontdoor_firewall_policy      = var.frontdoor_firewall_policy
   frontdoor_firewall_custom_rule = var.frontdoor_firewall_custom_rule
   backend_origins                = local.backend_origins
+}
+
+module "managed_id" {
+  source = "../../modules/managed_id"
+
+  common                 = var.common
+  resource_group_name    = module.resource_group.resource_group_name
+  subscription_id        = data.azurerm_subscription.primary.id
+  user_assigned_identity = var.user_assigned_identity
 }

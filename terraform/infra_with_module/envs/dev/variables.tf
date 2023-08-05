@@ -421,7 +421,7 @@ variable "frontdoor_firewall_policy" {
 
 variable "frontdoor_firewall_custom_rule" {
   default = {
-    100 = {
+    clientip = {
       rule_name    = "AllowClientIP"
       priority     = 100
       match_values = ["100.0.0.1", "100.0.0.2"]

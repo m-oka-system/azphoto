@@ -105,6 +105,20 @@ module "app_service" {
   subnet              = module.network.subnet
 }
 
+# Define the origin of the Azure Front Door backend
+locals {
+  backend_origins = {
+    app = {
+      host_name          = module.app_service.app_service["app"].default_hostname
+      origin_host_header = module.app_service.app_service["app"].default_hostname
+    }
+    blob = {
+      host_name          = module.storage.storage["app"].primary_blob_host
+      origin_host_header = module.storage.storage["app"].primary_blob_host
+    }
+  }
+}
+
 module "frontdoor" {
   source = "../../modules/frontdoor"
 
@@ -118,5 +132,5 @@ module "frontdoor" {
   frontdoor_security_policy      = var.frontdoor_security_policy
   frontdoor_firewall_policy      = var.frontdoor_firewall_policy
   frontdoor_firewall_custom_rule = var.frontdoor_firewall_custom_rule
-  app_service                    = module.app_service.app_service
+  backend_origins                = local.backend_origins
 }

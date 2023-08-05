@@ -374,6 +374,23 @@ variable "frontdoor_origin_group" {
         successful_samples_required        = 3
       }
     }
+    blob = {
+      name                                                      = "blob"
+      target_frontdoor_profile                                  = "app"
+      session_affinity_enabled                                  = false
+      restore_traffic_time_to_healed_or_new_endpoint_in_minutes = 0
+      health_probe = {
+        interval_in_seconds = 100
+        path                = "/"
+        protocol            = "Https"
+        request_type        = "HEAD"
+      }
+      load_balancing = {
+        additional_latency_in_milliseconds = 50
+        sample_size                        = 4
+        successful_samples_required        = 3
+      }
+    }
   }
 }
 
@@ -382,7 +399,17 @@ variable "frontdoor_origin" {
     app = {
       name                           = "app"
       target_frontdoor_origin_group  = "app"
-      target_app_service             = "app"
+      target_backend_origin          = "app"
+      certificate_name_check_enabled = true
+      http_port                      = 80
+      https_port                     = 443
+      priority                       = 1
+      weight                         = 1000
+    }
+    blob = {
+      name                           = "blob"
+      target_frontdoor_origin_group  = "blob"
+      target_backend_origin          = "blob"
       certificate_name_check_enabled = true
       http_port                      = 80
       https_port                     = 443
@@ -402,6 +429,17 @@ variable "frontdoor_route" {
       forwarding_protocol           = "HttpsOnly"
       https_redirect_enabled        = true
       patterns_to_match             = ["/*"]
+      supported_protocols           = ["Http", "Https"]
+      link_to_default_domain        = true
+    }
+    blob = {
+      name                          = "blob"
+      target_frontdoor_endpoint     = "app"
+      target_frontdoor_origin_group = "blob"
+      target_frontdoor_origin       = "blob"
+      forwarding_protocol           = "HttpsOnly"
+      https_redirect_enabled        = true
+      patterns_to_match             = ["/static/*"]
       supported_protocols           = ["Http", "Https"]
       link_to_default_domain        = true
     }

@@ -19,7 +19,6 @@ resource "azurerm_cdn_frontdoor_endpoint" "this" {
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this[each.value.target_frontdoor_profile].id
 }
 
-# App route (to App Service)
 resource "azurerm_cdn_frontdoor_origin_group" "this" {
   for_each                 = var.frontdoor_origin_group
   name                     = "${local.front_door_profile_name}-${each.value.name}-backend"
@@ -50,15 +49,15 @@ resource "azurerm_cdn_frontdoor_origin" "this" {
 
   certificate_name_check_enabled = true
 
-  host_name          = var.app_service[each.value.target_app_service].default_hostname
+  host_name          = var.backend_origins[each.value.target_backend_origin].host_name
   http_port          = each.value.http_port
   https_port         = each.value.https_port
-  origin_host_header = var.app_service[each.value.target_app_service].default_hostname
+  origin_host_header = var.backend_origins[each.value.target_backend_origin].origin_host_header
   priority           = each.value.priority
   weight             = each.value.weight
 }
 
-resource "azurerm_cdn_frontdoor_route" "app" {
+resource "azurerm_cdn_frontdoor_route" "this" {
   for_each                      = var.frontdoor_route
   name                          = "${local.front_door_profile_name}-${each.value.name}-route"
   cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.this[each.value.target_frontdoor_endpoint].id

@@ -8,4 +8,4 @@ variable "frontdoor_route" {}
 variable "frontdoor_security_policy" {}
 variable "frontdoor_firewall_policy" {}
 variable "frontdoor_firewall_custom_rule" {}
-variable "app_service" {}
+variable "backend_origins" {}

@@ -98,6 +98,16 @@ module "redis" {
   redis               = var.redis
 }
 
+module "private_dns_zone" {
+  source = "../../modules/private_dns_zone"
+
+  common              = var.common
+  resource_group_name = module.resource_group.resource_group_name
+  private_dns_zone    = var.private_dns_zone
+  vnet                = module.network.vnet
+  target_vnet         = "spoke1"
+}
+
 module "vm" {
   source = "../../modules/vm"
 

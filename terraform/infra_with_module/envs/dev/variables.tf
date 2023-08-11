@@ -294,6 +294,15 @@ variable "redis" {
   }
 }
 
+variable "private_dns_zone" {
+  type = map(string)
+  default = {
+    blob      = "privatelink.blob.core.windows.net"
+    key_vault = "privatelink.vaultcore.azure.net"
+    redis     = "privatelink.redis.cache.windows.net"
+  }
+}
+
 variable "vm" {
   type = map(object({
     name              = string

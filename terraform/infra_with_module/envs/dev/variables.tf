@@ -7,6 +7,15 @@ variable "common" {
   }
 }
 
+variable "django_app" {
+  type = map(string)
+  default = {
+    secret_key         = "secret_key"
+    sendgrid_api_key   = "sendgrid_api_key"
+    default_from_email = "default_from_email"
+  }
+}
+
 variable "network" {
   type = map(object({
     name          = string
@@ -212,6 +221,7 @@ variable "mysql" {
     target_subnet                = string
     db_username                  = string
     db_password                  = string
+    db_port                      = number
     db_size                      = string
     version                      = string
     zone                         = string
@@ -230,6 +240,7 @@ variable "mysql" {
       target_subnet                = "db"
       db_username                  = "db_username"
       db_password                  = "db_password"
+      db_port                      = 3306
       db_size                      = "B_Standard_B1s"
       version                      = "8.0.21"
       zone                         = "1"
@@ -261,6 +272,7 @@ variable "redis" {
     name                          = string
     sku_name                      = string
     family                        = string
+    redis_port                    = number
     capacity                      = number
     redis_version                 = number
     public_network_access_enabled = bool
@@ -272,6 +284,7 @@ variable "redis" {
       name                          = "redis"
       sku_name                      = "Basic"
       family                        = "C"
+      redis_port                    = 6380
       capacity                      = 0
       redis_version                 = 6
       public_network_access_enabled = false

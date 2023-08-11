@@ -69,6 +69,14 @@ module "keyvault" {
   tenant_id           = local.tenant_id
 }
 
+module "app_key_vaul_secrets" {
+  source = "../../modules/keyvault_secret"
+
+  keyvault          = module.keyvault.keyvault
+  key_vault_secrets = local.app_key_vaul_secrets
+  target_key_vault  = "app"
+}
+
 module "mysql" {
   source = "../../modules/mysql"
 

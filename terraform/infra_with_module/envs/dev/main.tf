@@ -108,6 +108,16 @@ module "private_dns_zone" {
   target_vnet         = "spoke1"
 }
 
+module "private_endpoint" {
+  source = "../../modules/private_endpoint"
+
+  common              = var.common
+  resource_group_name = module.resource_group.resource_group_name
+  private_endpoint    = local.private_endpoint
+  subnet              = module.network.subnet
+  private_dns_zone    = module.private_dns_zone.private_dns_zone
+}
+
 module "vm" {
   source = "../../modules/vm"
 

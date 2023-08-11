@@ -35,4 +35,28 @@ locals {
       appinsights_connection_string = module.application_insights.application_insights["app"].connection_string
     }
   }
+
+  private_endpoint = {
+    app_blob = {
+      name                           = module.storage.storage["app"].name
+      target_subnet                  = "pe"
+      target_private_dns_zone        = "blob"
+      subresource_names              = ["blob"]
+      private_connection_resource_id = module.storage.storage["app"].id
+    }
+    app_key_vault = {
+      name                           = module.keyvault.keyvault["app"].name
+      target_subnet                  = "pe"
+      target_private_dns_zone        = "key_vault"
+      subresource_names              = ["vault"]
+      private_connection_resource_id = module.keyvault.keyvault["app"].id
+    }
+    app_redis = {
+      name                           = module.redis.redis["app"].name
+      target_subnet                  = "pe"
+      target_private_dns_zone        = "redis"
+      subresource_names              = ["redisCache"]
+      private_connection_resource_id = module.redis.redis["app"].id
+    }
+  }
 }

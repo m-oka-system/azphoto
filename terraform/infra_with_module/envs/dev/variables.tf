@@ -615,15 +615,15 @@ variable "role_assignment" {
     role_definition_name = string
   }))
   default = {
-    app-acr-pull = {
+    app_acr_pull = {
       target_identity      = "app"
       role_definition_name = "AcrPull"
     }
-    app-key-vault-secrets-user = {
+    app_key_vault_secrets_user = {
       target_identity      = "app"
       role_definition_name = "Key Vault Secrets User"
     }
-    app-storage-blob-data-contributor = {
+    app_storage_blob_data_contributor = {
       target_identity      = "app"
       role_definition_name = "Storage Blob Data Contributor"
     }

@@ -256,6 +256,31 @@ variable "database" {
   }
 }
 
+variable "redis" {
+  type = map(object({
+    name                          = string
+    sku_name                      = string
+    family                        = string
+    capacity                      = number
+    redis_version                 = number
+    public_network_access_enabled = bool
+    enable_non_ssl_port           = bool
+    minimum_tls_version           = string
+  }))
+  default = {
+    app = {
+      name                          = "redis"
+      sku_name                      = "Basic"
+      family                        = "C"
+      capacity                      = 0
+      redis_version                 = 6
+      public_network_access_enabled = false
+      enable_non_ssl_port           = false
+      minimum_tls_version           = "1.2"
+    }
+  }
+}
+
 variable "vm" {
   type = map(object({
     name              = string

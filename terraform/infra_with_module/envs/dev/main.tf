@@ -80,6 +80,15 @@ module "mysql" {
   subnet              = module.network.subnet
 }
 
+module "redis" {
+  source = "../../modules/redis"
+
+  common              = var.common
+  resource_group_name = module.resource_group.resource_group_name
+  random              = random_integer.num.result
+  redis               = var.redis
+}
+
 module "vm" {
   source = "../../modules/vm"
 

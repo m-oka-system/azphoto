@@ -55,7 +55,7 @@ module "storage" {
 
   common              = var.common
   resource_group_name = module.resource_group.resource_group_name
-  random              = local.random
+  random              = local.common.random
   storage             = var.storage
   blob_container      = var.blob_container
 }
@@ -66,14 +66,14 @@ module "keyvault" {
   common              = var.common
   resource_group_name = module.resource_group.resource_group_name
   keyvault            = var.keyvault
-  tenant_id           = local.tenant_id
+  tenant_id           = local.common.tenant_id
 }
 
 module "app_key_vaul_secrets" {
   source = "../../modules/keyvault_secret"
 
   keyvault          = module.keyvault.keyvault
-  key_vault_secrets = local.app_key_vaul_secrets
+  key_vault_secrets = local.key_vault.app_key_vaul_secrets
   target_key_vault  = "app"
 }
 
@@ -82,7 +82,7 @@ module "mysql" {
 
   common              = var.common
   resource_group_name = module.resource_group.resource_group_name
-  random              = local.random
+  random              = local.common.random
   mysql               = var.mysql
   database            = var.database
   vnet                = module.network.vnet
@@ -94,7 +94,7 @@ module "redis" {
 
   common              = var.common
   resource_group_name = module.resource_group.resource_group_name
-  random              = local.random
+  random              = local.common.random
   redis               = var.redis
 }
 
@@ -138,7 +138,7 @@ module "frontdoor" {
   frontdoor_security_policy      = var.frontdoor_security_policy
   frontdoor_firewall_policy      = var.frontdoor_firewall_policy
   frontdoor_firewall_custom_rule = var.frontdoor_firewall_custom_rule
-  backend_origins                = local.backend_origins
+  backend_origins                = local.front_door.backend_origins
 }
 
 module "user_assigned_identity" {
@@ -146,7 +146,7 @@ module "user_assigned_identity" {
 
   common                 = var.common
   resource_group_name    = module.resource_group.resource_group_name
-  subscription_id        = local.subscription_id
+  subscription_id        = local.common.subscription_id
   user_assigned_identity = var.user_assigned_identity
   role_assignment        = var.role_assignment
 }

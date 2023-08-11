@@ -137,11 +137,12 @@ module "frontdoor" {
   backend_origins                = local.backend_origins
 }
 
-module "managed_id" {
-  source = "../../modules/managed_id"
+module "user_assigned_identity" {
+  source = "../../modules/user_assigned_identity"
 
   common                 = var.common
   resource_group_name    = module.resource_group.resource_group_name
   subscription_id        = data.azurerm_subscription.primary.id
   user_assigned_identity = var.user_assigned_identity
+  role_assignment        = var.role_assignment
 }

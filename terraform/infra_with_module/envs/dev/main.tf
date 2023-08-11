@@ -150,3 +150,12 @@ module "log_analytics" {
   resource_group_name = module.resource_group.resource_group_name
   log_analytics       = var.log_analytics
 }
+
+module "application_insights" {
+  source = "../../modules/application_insights"
+
+  common               = var.common
+  resource_group_name  = module.resource_group.resource_group_name
+  application_insights = var.application_insights
+  log_analytics        = module.log_analytics.log_analytics
+}

@@ -642,3 +642,20 @@ variable "log_analytics" {
     }
   }
 }
+
+variable "application_insights" {
+  type = map(object({
+    name              = string
+    application_type  = string
+    target_workspace  = string
+    retention_in_days = number
+  }))
+  default = {
+    app = {
+      name              = "app"
+      target_workspace  = "logs"
+      application_type  = "web"
+      retention_in_days = 90
+    }
+  }
+}

@@ -138,7 +138,7 @@ module "user_assigned_identity" {
 
   common                 = var.common
   resource_group_name    = module.resource_group.resource_group_name
-  subscription_id        = data.azurerm_subscription.primary.id
+  subscription_id        = local.subscription_id
   user_assigned_identity = var.user_assigned_identity
   role_assignment        = var.role_assignment
 }

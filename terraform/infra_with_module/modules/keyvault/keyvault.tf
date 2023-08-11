@@ -1,15 +1,13 @@
 ################################
 # Key Vault
 ################################
-data "azurerm_subscription" "primary" {}
-
 resource "azurerm_key_vault" "this" {
   for_each                   = var.keyvault
   name                       = "${var.common.prefix}-${var.common.env}-${each.value.name}-vault"
   location                   = var.common.location
   resource_group_name        = var.resource_group_name
   sku_name                   = each.value.sku_name
-  tenant_id                  = data.azurerm_subscription.primary.tenant_id
+  tenant_id                  = var.tenant_id
   enable_rbac_authorization  = each.value.enable_rbac_authorization
   purge_protection_enabled   = each.value.purge_protection_enabled
   soft_delete_retention_days = each.value.soft_delete_retention_days

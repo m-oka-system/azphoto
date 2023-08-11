@@ -55,7 +55,7 @@ module "storage" {
 
   common              = var.common
   resource_group_name = module.resource_group.resource_group_name
-  random              = random_integer.num.result
+  random              = local.random
   storage             = var.storage
   blob_container      = var.blob_container
 }
@@ -66,6 +66,7 @@ module "keyvault" {
   common              = var.common
   resource_group_name = module.resource_group.resource_group_name
   keyvault            = var.keyvault
+  tenant_id           = local.tenant_id
 }
 
 module "mysql" {
@@ -73,7 +74,7 @@ module "mysql" {
 
   common              = var.common
   resource_group_name = module.resource_group.resource_group_name
-  random              = random_integer.num.result
+  random              = local.random
   mysql               = var.mysql
   database            = var.database
   vnet                = module.network.vnet
@@ -85,7 +86,7 @@ module "redis" {
 
   common              = var.common
   resource_group_name = module.resource_group.resource_group_name
-  random              = random_integer.num.result
+  random              = local.random
   redis               = var.redis
 }
 
@@ -114,20 +115,6 @@ module "app_service" {
   service_plan        = var.service_plan
   app_service         = var.app_service
   subnet              = module.network.subnet
-}
-
-# Define the origin of the Azure Front Door backend
-locals {
-  backend_origins = {
-    app = {
-      host_name          = module.app_service.app_service["app"].default_hostname
-      origin_host_header = module.app_service.app_service["app"].default_hostname
-    }
-    blob = {
-      host_name          = module.storage.storage["app"].primary_blob_host
-      origin_host_header = module.storage.storage["app"].primary_blob_host
-    }
-  }
 }
 
 module "frontdoor" {

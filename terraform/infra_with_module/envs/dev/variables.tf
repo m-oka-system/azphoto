@@ -629,3 +629,16 @@ variable "role_assignment" {
     }
   }
 }
+
+variable "log_analytics" {
+  type = map(object({
+    sku               = string
+    retention_in_days = number
+  }))
+  default = {
+    logs = {
+      sku               = "PerGB2018"
+      retention_in_days = 30
+    }
+  }
+}

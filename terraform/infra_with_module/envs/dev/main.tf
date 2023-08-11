@@ -142,3 +142,11 @@ module "user_assigned_identity" {
   user_assigned_identity = var.user_assigned_identity
   role_assignment        = var.role_assignment
 }
+
+module "log_analytics" {
+  source = "../../modules/log_analytics"
+
+  common              = var.common
+  resource_group_name = module.resource_group.resource_group_name
+  log_analytics       = var.log_analytics
+}

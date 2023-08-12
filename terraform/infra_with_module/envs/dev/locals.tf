@@ -5,6 +5,37 @@ locals {
     random          = random_integer.num.result
   }
 
+  django_app = {
+    service_fqdn = "${var.dns["app"].custom_domain_host_name}.${var.dns["app"].dns_zone_name}"
+  }
+
+  app_service = {
+    app_settings = {
+      "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = var.django_app.websites_enable_app_service_storage
+      "WEBSITES_PORT"                       = var.django_app.websites_port
+      "DJANGO_SETTINGS_MODULE"              = var.django_app.django_settings_module
+      "DJANGO_SECURE_SSL_REDIRECT"          = var.django_app.django_secure_ssl_redirect
+      "DJANGO_DEBUG"                        = var.django_app.django_debug
+      "DJANGO_ALLOWED_HOSTS"                = local.django_app.service_fqdn
+      "DJANGO_AZURE_ACCOUNT_NAME"           = module.storage.storage_account["app"].name
+      "DJANGO_AZURE_STATIC_CONTAINER"       = module.storage.storage_container["app_static"].name
+      "DJANGO_AZURE_MEDIA_CONTAINER"        = module.storage.storage_container["app_media"].name
+      "DB_HOST"                             = "@Microsoft.KeyVault(VaultName=${module.key_vault.key_vault["app"].name};SecretName=DB-HOST)"
+      "DB_NAME"                             = "@Microsoft.KeyVault(VaultName=${module.key_vault.key_vault["app"].name};SecretName=DB-NAME)"
+      "DB_USERNAME"                         = "@Microsoft.KeyVault(VaultName=${module.key_vault.key_vault["app"].name};SecretName=DB-USERNAME)"
+      "DB_PASSWORD"                         = "@Microsoft.KeyVault(VaultName=${module.key_vault.key_vault["app"].name};SecretName=DB-PASSWORD)"
+      "DB_PORT"                             = "@Microsoft.KeyVault(VaultName=${module.key_vault.key_vault["app"].name};SecretName=DB-PORT)"
+      "REDIS_HOST"                          = "@Microsoft.KeyVault(VaultName=${module.key_vault.key_vault["app"].name};SecretName=REDIS-HOST)"
+      "REDIS_KEY"                           = "@Microsoft.KeyVault(VaultName=${module.key_vault.key_vault["app"].name};SecretName=REDIS-KEY)"
+      "REDIS_PORT"                          = "@Microsoft.KeyVault(VaultName=${module.key_vault.key_vault["app"].name};SecretName=REDIS-PORT)"
+      "SENDGRID_API_KEY"                    = "@Microsoft.KeyVault(VaultName=${module.key_vault.key_vault["app"].name};SecretName=SENDGRID-API-KEY)"
+      "DJANGO_DEFAULT_FROM_EMAIL"           = "@Microsoft.KeyVault(VaultName=${module.key_vault.key_vault["app"].name};SecretName=DEFAULT-FROM-EMAIL)"
+      "DJANGO_SECRET_KEY"                   = "@Microsoft.KeyVault(VaultName=${module.key_vault.key_vault["app"].name};SecretName=DJANGO-SECRET-KEY)"
+      "APPINSIGHTS_CONNECTION_STRING"       = "@Microsoft.KeyVault(VaultName=${module.key_vault.key_vault["app"].name};SecretName=APPINSIGHTS-CONNECTION-STRING)"
+      "AZURE_CLIENT_ID"                     = "@Microsoft.KeyVault(VaultName=${module.key_vault.key_vault["app"].name};SecretName=WEBAPPCONTAINER-CLIENT-ID)"
+    }
+  }
+
   front_door = {
     backend_origins = {
       app = {
@@ -12,8 +43,8 @@ locals {
         origin_host_header = module.app_service.app_service["app"].default_hostname
       }
       blob = {
-        host_name          = module.storage.storage["app"].primary_blob_host
-        origin_host_header = module.storage.storage["app"].primary_blob_host
+        host_name          = module.storage.storage_account["app"].primary_blob_host
+        origin_host_header = module.storage.storage_account["app"].primary_blob_host
       }
     }
   }
@@ -38,11 +69,11 @@ locals {
 
   private_endpoint = {
     app_blob = {
-      name                           = module.storage.storage["app"].name
+      name                           = module.storage.storage_account["app"].name
       target_subnet                  = "pe"
       target_private_dns_zone        = "blob"
       subresource_names              = ["blob"]
-      private_connection_resource_id = module.storage.storage["app"].id
+      private_connection_resource_id = module.storage.storage_account["app"].id
     }
     app_key_vault = {
       name                           = module.key_vault.key_vault["app"].name

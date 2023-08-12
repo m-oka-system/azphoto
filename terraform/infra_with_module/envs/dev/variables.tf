@@ -10,9 +10,14 @@ variable "common" {
 variable "django_app" {
   type = map(string)
   default = {
-    secret_key         = "secret_key"
-    sendgrid_api_key   = "sendgrid_api_key"
-    default_from_email = "default_from_email"
+    secret_key                          = "secret_key"
+    sendgrid_api_key                    = "sendgrid_api_key"
+    default_from_email                  = "default_from_email"
+    websites_enable_app_service_storage = "False"
+    websites_port                       = "8000"
+    django_settings_module              = "config.settings.production"
+    django_secure_ssl_redirect          = "False"
+    django_debug                        = "False"
   }
 }
 
@@ -165,17 +170,17 @@ variable "storage" {
 variable "blob_container" {
   type = map(map(string))
   default = {
-    app01 = {
+    app_static = {
       storage_account_key   = "app"
       container_name        = "static"
       container_access_type = "blob"
     }
-    app02 = {
+    app_media = {
       storage_account_key   = "app"
       container_name        = "media"
       container_access_type = "blob"
     }
-    log01 = {
+    log = {
       storage_account_key   = "log"
       container_name        = "log"
       container_access_type = "private"
@@ -378,10 +383,12 @@ variable "service_plan" {
 
 variable "app_service" {
   type = map(object({
-    name                = string
-    target_service_plan = string
-    target_subnet       = string
-    https_only          = bool
+    name                          = string
+    target_service_plan           = string
+    target_subnet                 = string
+    target_user_assigned_identity = string
+    https_only                    = bool
+    public_network_access_enabled = bool
     site_config = object({
       always_on              = bool
       ftps_state             = string
@@ -390,10 +397,12 @@ variable "app_service" {
   }))
   default = {
     app = {
-      name                = "app"
-      target_service_plan = "app"
-      target_subnet       = "app"
-      https_only          = true
+      name                          = "app"
+      target_service_plan           = "app"
+      target_subnet                 = "app"
+      target_user_assigned_identity = "app"
+      https_only                    = true
+      public_network_access_enabled = true
       site_config = {
         always_on              = false
         ftps_state             = "Disabled"

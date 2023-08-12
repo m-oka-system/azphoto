@@ -142,7 +142,9 @@ module "app_service" {
   resource_group_name = module.resource_group.resource_group_name
   service_plan        = var.service_plan
   app_service         = var.app_service
+  app_settings        = local.app_service.app_settings
   subnet              = module.network.subnet
+  identity            = module.user_assigned_identity.user_assigned_identity
 }
 
 module "frontdoor" {

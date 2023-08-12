@@ -387,6 +387,7 @@ variable "app_service" {
     target_service_plan           = string
     target_subnet                 = string
     target_user_assigned_identity = string
+    target_frontdoor_profile      = string
     https_only                    = bool
     public_network_access_enabled = bool
     site_config = object({
@@ -394,6 +395,20 @@ variable "app_service" {
       ftps_state             = string
       vnet_route_all_enabled = bool
     })
+    ip_restriction = map(object({
+      name        = string
+      priority    = number
+      action      = string
+      ip_address  = string
+      service_tag = string
+    }))
+    scm_ip_restriction = map(object({
+      name        = string
+      priority    = number
+      action      = string
+      ip_address  = string
+      service_tag = string
+    }))
   }))
   default = {
     app = {
@@ -401,12 +416,45 @@ variable "app_service" {
       target_service_plan           = "app"
       target_subnet                 = "app"
       target_user_assigned_identity = "app"
+      target_frontdoor_profile      = "app"
       https_only                    = true
       public_network_access_enabled = true
       site_config = {
         always_on              = false
         ftps_state             = "Disabled"
         vnet_route_all_enabled = true
+      }
+      ip_restriction = {
+        frontdoor = {
+          name        = "AllowFrontDoor"
+          priority    = 100
+          action      = "Allow"
+          ip_address  = null
+          service_tag = "AzureFrontDoor.Backend"
+        }
+        myip = {
+          name        = "AllowMyIP"
+          priority    = 200
+          action      = "Allow"
+          ip_address  = "100.0.0.1/32"
+          service_tag = null
+        }
+      }
+      scm_ip_restriction = {
+        devops = {
+          name        = "AllowDevOps"
+          priority    = 100
+          action      = "Allow"
+          ip_address  = null
+          service_tag = "AzureCloud"
+        }
+        myip = {
+          name        = "AllowMyIP"
+          priority    = 200
+          action      = "Allow"
+          ip_address  = "100.0.0.1/32"
+          service_tag = null
+        }
       }
     }
   }

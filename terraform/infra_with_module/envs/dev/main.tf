@@ -145,6 +145,7 @@ module "app_service" {
   app_settings        = local.app_service.app_settings
   subnet              = module.network.subnet
   identity            = module.user_assigned_identity.user_assigned_identity
+  frontdoor_profile   = module.frontdoor.frontdoor_profile
 }
 
 module "frontdoor" {

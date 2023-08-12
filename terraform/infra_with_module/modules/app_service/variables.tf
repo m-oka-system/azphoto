@@ -5,3 +5,4 @@ variable "app_service" {}
 variable "app_settings" {}
 variable "subnet" {}
 variable "identity" {}
+variable "frontdoor_profile" {}

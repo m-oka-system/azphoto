@@ -73,7 +73,7 @@ module "app_key_vaul_secrets" {
   source = "../../modules/key_vault_secret"
 
   key_vault         = module.key_vault.key_vault
-  key_vault_secrets = local.key_vault.app_key_vaul_secrets
+  key_vault_secrets = local.key_vault.key_vaul_secrets
   target_key_vault  = "app"
 }
 

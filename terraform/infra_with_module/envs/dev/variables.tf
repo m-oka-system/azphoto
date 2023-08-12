@@ -183,7 +183,7 @@ variable "blob_container" {
   }
 }
 
-variable "keyvault" {
+variable "key_vault" {
   type = map(object({
     name                       = string
     sku_name                   = string

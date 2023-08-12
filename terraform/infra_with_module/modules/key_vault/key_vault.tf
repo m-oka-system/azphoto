@@ -2,7 +2,7 @@
 # Key Vault
 ################################
 resource "azurerm_key_vault" "this" {
-  for_each                   = var.keyvault
+  for_each                   = var.key_vault
   name                       = "${var.common.prefix}-${var.common.env}-${each.value.name}-vault"
   location                   = var.common.location
   resource_group_name        = var.resource_group_name

@@ -60,19 +60,19 @@ module "storage" {
   blob_container      = var.blob_container
 }
 
-module "keyvault" {
-  source = "../../modules/keyvault"
+module "key_vault" {
+  source = "../../modules/key_vault"
 
   common              = var.common
   resource_group_name = module.resource_group.resource_group_name
-  keyvault            = var.keyvault
+  key_vault           = var.key_vault
   tenant_id           = local.common.tenant_id
 }
 
 module "app_key_vaul_secrets" {
-  source = "../../modules/keyvault_secret"
+  source = "../../modules/key_vault_secret"
 
-  keyvault          = module.keyvault.keyvault
+  key_vault         = module.key_vault.key_vault
   key_vault_secrets = local.key_vault.app_key_vaul_secrets
   target_key_vault  = "app"
 }

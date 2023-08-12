@@ -45,11 +45,11 @@ locals {
       private_connection_resource_id = module.storage.storage["app"].id
     }
     app_key_vault = {
-      name                           = module.keyvault.keyvault["app"].name
+      name                           = module.key_vault.key_vault["app"].name
       target_subnet                  = "pe"
       target_private_dns_zone        = "key_vault"
       subresource_names              = ["vault"]
-      private_connection_resource_id = module.keyvault.keyvault["app"].id
+      private_connection_resource_id = module.key_vault.key_vault["app"].id
     }
     app_redis = {
       name                           = module.redis.redis["app"].name

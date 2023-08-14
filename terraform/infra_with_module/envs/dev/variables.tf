@@ -84,14 +84,12 @@ variable "subnet" {
 }
 
 variable "dns" {
-  type = map(map(string))
+  type = map(string)
   default = {
-    app = {
       dns_zone_name           = "example.com"
       custom_domain_host_name = "www"
     }
   }
-}
 
 variable "storage" {
   type = map(object({

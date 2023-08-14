@@ -6,7 +6,7 @@ locals {
   }
 
   django_app = {
-    service_fqdn = "${var.dns["app"].custom_domain_host_name}.${var.dns["app"].dns_zone_name}"
+    service_fqdn = "${var.dns.custom_domain_host_name}.${var.dns.dns_zone_name}"
   }
 
   key_vault = {

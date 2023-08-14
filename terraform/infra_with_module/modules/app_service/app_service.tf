@@ -74,5 +74,18 @@ resource "azurerm_linux_web_app" "this" {
         service_tag = scm_ip_restriction.value.service_tag
       }
     }
+
+    application_stack {
+      # Initial container image (overwritten by CI/CD)
+      docker_image_name   = "appsvc/staticsite:latest"
+      docker_registry_url = "https://mcr.microsoft.com"
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      site_config[0].application_stack[0].docker_image_name,
+      site_config[0].application_stack[0].docker_registry_url
+    ]
   }
 }

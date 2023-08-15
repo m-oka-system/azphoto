@@ -86,10 +86,10 @@ variable "subnet" {
 variable "dns" {
   type = map(string)
   default = {
-      dns_zone_name           = "example.com"
-      custom_domain_host_name = "www"
-    }
+    dns_zone_name           = "example.com"
+    custom_domain_host_name = "www"
   }
+}
 
 variable "storage" {
   type = map(object({
@@ -385,7 +385,6 @@ variable "app_service" {
     target_service_plan           = string
     target_subnet                 = string
     target_user_assigned_identity = string
-    target_frontdoor_profile      = string
     https_only                    = bool
     public_network_access_enabled = bool
     site_config = object({
@@ -414,7 +413,6 @@ variable "app_service" {
       target_service_plan           = "app"
       target_subnet                 = "app"
       target_user_assigned_identity = "app"
-      target_frontdoor_profile      = "app"
       https_only                    = true
       public_network_access_enabled = true
       site_config = {
@@ -459,37 +457,28 @@ variable "app_service" {
 }
 
 variable "frontdoor" {
-  type = map(object({
+  type = object({
     name                     = string
     sku_name                 = string
     response_timeout_seconds = number
-  }))
+  })
   default = {
-    app = {
-      name                     = "app"
-      sku_name                 = "Standard_AzureFrontDoor"
-      response_timeout_seconds = 60
-    }
+    name                     = "app"
+    sku_name                 = "Standard_AzureFrontDoor"
+    response_timeout_seconds = 60
   }
 }
 
 variable "frontdoor_endpoint" {
-  type = map(object({
-    name                     = string
-    target_frontdoor_profile = string
-  }))
+  type = map(string)
   default = {
-    app = {
-      name                     = "app"
-      target_frontdoor_profile = "app"
-    }
+    name = "app"
   }
 }
 
 variable "frontdoor_origin_group" {
   type = map(object({
     name                                                      = string
-    target_frontdoor_profile                                  = string
     session_affinity_enabled                                  = bool
     restore_traffic_time_to_healed_or_new_endpoint_in_minutes = number
     health_probe = object({
@@ -507,7 +496,6 @@ variable "frontdoor_origin_group" {
   default = {
     app = {
       name                                                      = "app"
-      target_frontdoor_profile                                  = "app"
       session_affinity_enabled                                  = false
       restore_traffic_time_to_healed_or_new_endpoint_in_minutes = 0
       health_probe = {
@@ -524,7 +512,6 @@ variable "frontdoor_origin_group" {
     }
     blob = {
       name                                                      = "blob"
-      target_frontdoor_profile                                  = "app"
       session_affinity_enabled                                  = false
       restore_traffic_time_to_healed_or_new_endpoint_in_minutes = 0
       health_probe = {
@@ -580,7 +567,6 @@ variable "frontdoor_origin" {
 variable "frontdoor_route" {
   type = map(object({
     name                          = string
-    target_frontdoor_endpoint     = string
     target_frontdoor_origin_group = string
     target_frontdoor_origin       = string
     forwarding_protocol           = string
@@ -598,7 +584,6 @@ variable "frontdoor_route" {
   default = {
     app = {
       name                          = "app"
-      target_frontdoor_endpoint     = "app"
       target_frontdoor_origin_group = "app"
       target_frontdoor_origin       = "app"
       forwarding_protocol           = "HttpsOnly"
@@ -610,7 +595,6 @@ variable "frontdoor_route" {
     }
     blob = {
       name                          = "blob"
-      target_frontdoor_endpoint     = "app"
       target_frontdoor_origin_group = "blob"
       target_frontdoor_origin       = "blob"
       forwarding_protocol           = "HttpsOnly"
@@ -662,15 +646,13 @@ variable "frontdoor_firewall_custom_rule" {
 
 variable "frontdoor_security_policy" {
   type = map(object({
-    name                     = string
-    target_frontdoor_profile = string
-    target_firewall_policy   = string
+    name                   = string
+    target_firewall_policy = string
   }))
   default = {
     app = {
-      name                     = "app"
-      target_frontdoor_profile = "app"
-      target_firewall_policy   = "app"
+      name                   = "app"
+      target_firewall_policy = "app"
     }
   }
 }

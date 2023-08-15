@@ -53,7 +53,7 @@ resource "azurerm_linux_web_app" "this" {
 
           content {
             x_azure_fdid = [
-              var.frontdoor_profile[each.value.target_frontdoor_profile].resource_guid
+              var.frontdoor_profile.resource_guid
             ]
             x_fd_health_probe = []
             x_forwarded_for   = []

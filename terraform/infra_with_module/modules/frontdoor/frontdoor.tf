@@ -6,23 +6,21 @@ locals {
 }
 
 resource "azurerm_cdn_frontdoor_profile" "this" {
-  for_each                 = var.frontdoor
   name                     = "${var.common.prefix}-${var.common.env}-afd"
   resource_group_name      = var.resource_group_name
-  sku_name                 = each.value.sku_name
-  response_timeout_seconds = each.value.response_timeout_seconds
+  sku_name                 = var.frontdoor.sku_name
+  response_timeout_seconds = var.frontdoor.response_timeout_seconds
 }
 
 resource "azurerm_cdn_frontdoor_endpoint" "this" {
-  for_each                 = var.frontdoor_endpoint
-  name                     = "${local.front_door_profile_name}-${each.value.name}-ep"
-  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this[each.value.target_frontdoor_profile].id
+  name                     = "${local.front_door_profile_name}-${var.frontdoor_endpoint.name}-ep"
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this.id
 }
 
 resource "azurerm_cdn_frontdoor_origin_group" "this" {
   for_each                 = var.frontdoor_origin_group
   name                     = "${local.front_door_profile_name}-${each.value.name}-backend"
-  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this[each.value.target_frontdoor_profile].id
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this.id
   session_affinity_enabled = each.value.session_affinity_enabled
 
   restore_traffic_time_to_healed_or_new_endpoint_in_minutes = each.value.restore_traffic_time_to_healed_or_new_endpoint_in_minutes
@@ -60,7 +58,7 @@ resource "azurerm_cdn_frontdoor_origin" "this" {
 resource "azurerm_cdn_frontdoor_route" "this" {
   for_each                      = var.frontdoor_route
   name                          = "${local.front_door_profile_name}-${each.value.name}-route"
-  cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.this[each.value.target_frontdoor_endpoint].id
+  cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.this.id
   cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.this[each.value.target_frontdoor_origin_group].id
   cdn_frontdoor_origin_ids      = [azurerm_cdn_frontdoor_origin.this[each.value.target_frontdoor_origin].id]
   cdn_frontdoor_rule_set_ids    = []
@@ -90,20 +88,17 @@ resource "azurerm_cdn_frontdoor_route" "this" {
 # resource "azurerm_cdn_frontdoor_security_policy" "this" {
 #   for_each                 = var.frontdoor_security_policy
 #   name                     = "${local.front_door_profile_name}-${each.value.name}-secpolicy"
-#   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this[each.value.target_frontdoor_profile].id
+#   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this.id
 
 #   security_policies {
 #     firewall {
 #       cdn_frontdoor_firewall_policy_id = azurerm_cdn_frontdoor_firewall_policy.this[each.value.target_firewall_policy].id
 
 #       association {
-#         dynamic "domain" {
-#           for_each = var.frontdoor_endpoint
-
-#           content {
-#             cdn_frontdoor_domain_id = azurerm_cdn_frontdoor_endpoint.this[each.key].id
-#           }
+#         domain {
+#           cdn_frontdoor_domain_id = azurerm_cdn_frontdoor_endpoint.this.id
 #         }
+
 #         patterns_to_match = ["/*"]
 #       }
 #     }

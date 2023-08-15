@@ -153,7 +153,7 @@ module "frontdoor" {
 
   common                         = var.common
   resource_group_name            = module.resource_group.resource_group_name
-  frontdoor                      = var.frontdoor
+  frontdoor_profile              = var.frontdoor_profile
   frontdoor_endpoint             = var.frontdoor_endpoint
   frontdoor_origin_group         = var.frontdoor_origin_group
   frontdoor_origin               = var.frontdoor_origin
@@ -162,6 +162,9 @@ module "frontdoor" {
   frontdoor_firewall_policy      = var.frontdoor_firewall_policy
   frontdoor_firewall_custom_rule = var.frontdoor_firewall_custom_rule
   backend_origins                = local.front_door.backend_origins
+  service_fqdn                   = local.django_app.service_fqdn
+  custom_domain_host_name        = var.dns.custom_domain_host_name
+  dns_zone                       = module.dns.dns_zone
 }
 
 module "user_assigned_identity" {

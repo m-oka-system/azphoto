@@ -69,8 +69,8 @@ resource "azurerm_cdn_frontdoor_route" "this" {
   patterns_to_match      = each.value.patterns_to_match
   supported_protocols    = each.value.supported_protocols
 
-  # cdn_frontdoor_custom_domain_ids = [azurerm_cdn_frontdoor_custom_domain.app.id]
-  link_to_default_domain = each.value.link_to_default_domain
+  cdn_frontdoor_custom_domain_ids = [azurerm_cdn_frontdoor_custom_domain.this.id]
+  link_to_default_domain          = each.value.link_to_default_domain
 
   dynamic "cache" {
     for_each = lookup(each.value, "cache", null) != null ? [each.value.cache] : []
@@ -82,6 +82,44 @@ resource "azurerm_cdn_frontdoor_route" "this" {
       content_types_to_compress     = cache.value.content_types_to_compress
     }
   }
+}
+
+resource "azurerm_cdn_frontdoor_custom_domain" "this" {
+  name                     = replace(var.service_fqdn, ".", "-")
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this.id
+  dns_zone_id              = var.dns_zone.id
+  host_name                = var.service_fqdn
+
+  tls {
+    certificate_type    = "ManagedCertificate"
+    minimum_tls_version = "TLS12"
+  }
+}
+
+resource "azurerm_cdn_frontdoor_custom_domain_association" "this" {
+  cdn_frontdoor_custom_domain_id = azurerm_cdn_frontdoor_custom_domain.this.id
+  cdn_frontdoor_route_ids = [
+    for key in keys(var.frontdoor_route) : azurerm_cdn_frontdoor_route.this[key].id
+  ]
+}
+
+resource "azurerm_dns_txt_record" "afd_validation" {
+  name                = "_dnsauth.${var.custom_domain_host_name}"
+  zone_name           = var.dns_zone.name
+  resource_group_name = var.resource_group_name
+  ttl                 = 3600
+
+  record {
+    value = azurerm_cdn_frontdoor_custom_domain.this.validation_token
+  }
+}
+
+resource "azurerm_dns_cname_record" "afd_cname" {
+  name                = var.custom_domain_host_name
+  zone_name           = var.dns_zone.name
+  resource_group_name = var.resource_group_name
+  ttl                 = 3600
+  record              = azurerm_cdn_frontdoor_endpoint.this.host_name
 }
 
 # # Web Application Firewall

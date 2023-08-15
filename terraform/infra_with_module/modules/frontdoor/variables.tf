@@ -9,3 +9,6 @@ variable "frontdoor_security_policy" {}
 variable "frontdoor_firewall_policy" {}
 variable "frontdoor_firewall_custom_rule" {}
 variable "backend_origins" {}
+variable "service_fqdn" {}
+variable "custom_domain_host_name" {}
+variable "dns_zone" {}

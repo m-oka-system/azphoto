@@ -456,7 +456,7 @@ variable "app_service" {
   }
 }
 
-variable "frontdoor" {
+variable "frontdoor_profile" {
   type = object({
     name                     = string
     sku_name                 = string

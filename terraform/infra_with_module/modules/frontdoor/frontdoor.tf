@@ -8,8 +8,8 @@ locals {
 resource "azurerm_cdn_frontdoor_profile" "this" {
   name                     = "${var.common.prefix}-${var.common.env}-afd"
   resource_group_name      = var.resource_group_name
-  sku_name                 = var.frontdoor.sku_name
-  response_timeout_seconds = var.frontdoor.response_timeout_seconds
+  sku_name                 = var.frontdoor_profile.sku_name
+  response_timeout_seconds = var.frontdoor_profile.response_timeout_seconds
 }
 
 resource "azurerm_cdn_frontdoor_endpoint" "this" {

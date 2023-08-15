@@ -43,6 +43,15 @@ module "network" {
   subnet              = var.subnet
 }
 
+module "network_security_group" {
+  source = "../../modules/network_security_group"
+
+  common                 = var.common
+  resource_group_name    = module.resource_group.resource_group_name
+  network_security_group = var.network_security_group
+  subnet                 = module.network.subnet
+}
+
 module "dns" {
   source = "../../modules/dns"
 

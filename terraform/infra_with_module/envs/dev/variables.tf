@@ -83,6 +83,92 @@ variable "subnet" {
   }
 }
 
+variable "network_security_group" {
+  type = map(object({
+    name          = string
+    target_subnet = string
+    security_rule = list(object({
+      name                       = string
+      priority                   = number
+      direction                  = string
+      access                     = string
+      protocol                   = string
+      source_port_range          = string
+      destination_port_range     = string
+      source_address_prefix      = optional(string)
+      source_address_prefixes    = optional(list(string))
+      destination_address_prefix = string
+    }))
+  }))
+  default = {
+    app = {
+      name          = "app"
+      target_subnet = "app"
+      security_rule = []
+    }
+    pe = {
+      name          = "pe"
+      target_subnet = "pe"
+      security_rule = []
+    }
+    db = {
+      name          = "db"
+      target_subnet = "db"
+      security_rule = []
+    }
+    vm = {
+      name          = "vm"
+      target_subnet = "vm"
+      security_rule = [
+        {
+          name                       = "AllowMyIpAddressHTTPInbound"
+          priority                   = 100
+          direction                  = "Inbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "80"
+          source_address_prefixes    = ["100.0.0.1", "100.0.0.2"]
+          destination_address_prefix = "*"
+        },
+        {
+          name                       = "AllowMyIpAddressHTTPSInbound"
+          priority                   = 110
+          direction                  = "Inbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "443"
+          source_address_prefixes    = ["100.0.0.1", "100.0.0.2"]
+          destination_address_prefix = "*"
+        },
+        {
+          name                       = "AllowMyIpAddressSSHInbound"
+          priority                   = 120
+          direction                  = "Inbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "22"
+          source_address_prefixes    = ["100.0.0.1", "100.0.0.2"]
+          destination_address_prefix = "*"
+        },
+        {
+          name                       = "AllowMyIpAddressRDPInbound"
+          priority                   = 130
+          direction                  = "Inbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "3389"
+          source_address_prefixes    = ["100.0.0.1", "100.0.0.2"]
+          destination_address_prefix = "*"
+        }
+      ]
+    }
+  }
+}
+
 variable "dns" {
   type = map(map(string))
   default = {

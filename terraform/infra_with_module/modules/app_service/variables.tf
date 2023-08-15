@@ -6,3 +6,5 @@ variable "app_settings" {}
 variable "subnet" {}
 variable "identity" {}
 variable "frontdoor_profile" {}
+variable "dns" {}
+variable "dns_zone" {}

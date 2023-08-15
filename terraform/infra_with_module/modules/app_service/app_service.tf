@@ -89,3 +89,25 @@ resource "azurerm_linux_web_app" "this" {
     ]
   }
 }
+
+resource "azurerm_app_service_custom_hostname_binding" "this" {
+  for_each            = var.dns
+  hostname            = "${var.dns[each.key].subdomain}.${var.dns[each.key].dns_zone_name}"
+  app_service_name    = azurerm_linux_web_app.this[each.key].name
+  resource_group_name = var.resource_group_name
+
+  depends_on = [
+    azurerm_dns_txt_record.web_app_validation
+  ]
+}
+
+resource "azurerm_dns_txt_record" "web_app_validation" {
+  for_each            = var.dns
+  name                = "asuid.${var.dns[each.key].subdomain}"
+  zone_name           = var.dns_zone[each.key].name
+  resource_group_name = var.resource_group_name
+  ttl                 = 3600
+  record {
+    value = azurerm_linux_web_app.this[each.key].custom_domain_verification_id
+  }
+}

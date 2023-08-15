@@ -29,7 +29,9 @@ resource "azurerm_mysql_flexible_server" "this" {
     size_gb           = each.value.storage.size_gb
   }
 
-  depends_on = [azurerm_private_dns_zone_virtual_network_link.this]
+  depends_on = [
+    azurerm_private_dns_zone_virtual_network_link.this
+  ]
 }
 
 resource "azurerm_mysql_flexible_database" "this" {

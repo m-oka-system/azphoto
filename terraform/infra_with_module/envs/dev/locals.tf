@@ -54,7 +54,7 @@ locals {
       "DJANGO_SETTINGS_MODULE"              = var.django_app.django_settings_module
       "DJANGO_SECURE_SSL_REDIRECT"          = var.django_app.django_secure_ssl_redirect
       "DJANGO_DEBUG"                        = var.django_app.django_debug
-      "DJANGO_ALLOWED_HOSTS"                = local.django_app.service_fqdn
+      "DJANGO_ALLOWED_HOSTS"                = "${var.dns["app"].subdomain}.${var.dns["app"].dns_zone_name}"
       "DJANGO_AZURE_ACCOUNT_NAME"           = module.storage.storage_account["app"].name
       "DJANGO_AZURE_STATIC_CONTAINER"       = module.storage.storage_container["app_static"].name
       "DJANGO_AZURE_MEDIA_CONTAINER"        = module.storage.storage_container["app_media"].name

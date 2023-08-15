@@ -146,6 +146,8 @@ module "app_service" {
   subnet              = module.network.subnet
   identity            = module.user_assigned_identity.user_assigned_identity
   frontdoor_profile   = module.frontdoor.frontdoor_profile
+  dns                 = var.dns
+  dns_zone            = module.dns.dns_zone
 }
 
 module "frontdoor" {

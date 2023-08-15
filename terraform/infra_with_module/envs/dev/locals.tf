@@ -5,10 +5,6 @@ locals {
     random          = random_integer.num.result
   }
 
-  django_app = {
-    service_fqdn = "${var.dns.custom_domain_host_name}.${var.dns.dns_zone_name}"
-  }
-
   key_vault = {
     key_vaul_secrets = {
       django_secret_key             = var.django_app.secret_key

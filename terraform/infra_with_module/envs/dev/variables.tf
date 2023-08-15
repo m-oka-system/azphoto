@@ -84,10 +84,12 @@ variable "subnet" {
 }
 
 variable "dns" {
-  type = map(string)
+  type = map(map(string))
   default = {
-    dns_zone_name           = "example.com"
-    custom_domain_host_name = "www"
+    app = {
+      dns_zone_name = "example.com"
+      subdomain     = "www"
+    }
   }
 }
 
@@ -569,6 +571,7 @@ variable "frontdoor_route" {
     name                          = string
     target_frontdoor_origin_group = string
     target_frontdoor_origin       = string
+    target_custom_domain          = string
     forwarding_protocol           = string
     https_redirect_enabled        = bool
     patterns_to_match             = list(string)
@@ -586,6 +589,7 @@ variable "frontdoor_route" {
       name                          = "app"
       target_frontdoor_origin_group = "app"
       target_frontdoor_origin       = "app"
+      target_custom_domain          = "app"
       forwarding_protocol           = "HttpsOnly"
       https_redirect_enabled        = true
       patterns_to_match             = ["/*"]
@@ -597,6 +601,7 @@ variable "frontdoor_route" {
       name                          = "blob"
       target_frontdoor_origin_group = "blob"
       target_frontdoor_origin       = "blob"
+      target_custom_domain          = "app"
       forwarding_protocol           = "HttpsOnly"
       https_redirect_enabled        = true
       patterns_to_match             = ["/media/*", "/static/*"]

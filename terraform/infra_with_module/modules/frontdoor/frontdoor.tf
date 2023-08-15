@@ -69,7 +69,7 @@ resource "azurerm_cdn_frontdoor_route" "this" {
   patterns_to_match      = each.value.patterns_to_match
   supported_protocols    = each.value.supported_protocols
 
-  cdn_frontdoor_custom_domain_ids = [azurerm_cdn_frontdoor_custom_domain.this.id]
+  cdn_frontdoor_custom_domain_ids = [azurerm_cdn_frontdoor_custom_domain.this[each.value.target_custom_domain].id]
   link_to_default_domain          = each.value.link_to_default_domain
 
   dynamic "cache" {
@@ -85,10 +85,11 @@ resource "azurerm_cdn_frontdoor_route" "this" {
 }
 
 resource "azurerm_cdn_frontdoor_custom_domain" "this" {
-  name                     = replace(var.service_fqdn, ".", "-")
+  for_each                 = var.dns
+  name                     = replace("${var.dns[each.key].subdomain}.${var.dns[each.key].dns_zone_name}", ".", "-")
   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this.id
-  dns_zone_id              = var.dns_zone.id
-  host_name                = var.service_fqdn
+  dns_zone_id              = var.dns_zone[each.key].id
+  host_name                = "${var.dns[each.key].subdomain}.${var.dns[each.key].dns_zone_name}"
 
   tls {
     certificate_type    = "ManagedCertificate"
@@ -97,26 +98,29 @@ resource "azurerm_cdn_frontdoor_custom_domain" "this" {
 }
 
 resource "azurerm_cdn_frontdoor_custom_domain_association" "this" {
-  cdn_frontdoor_custom_domain_id = azurerm_cdn_frontdoor_custom_domain.this.id
+  for_each                       = var.dns
+  cdn_frontdoor_custom_domain_id = azurerm_cdn_frontdoor_custom_domain.this[each.key].id
   cdn_frontdoor_route_ids = [
     for key in keys(var.frontdoor_route) : azurerm_cdn_frontdoor_route.this[key].id
   ]
 }
 
 resource "azurerm_dns_txt_record" "afd_validation" {
-  name                = "_dnsauth.${var.custom_domain_host_name}"
-  zone_name           = var.dns_zone.name
+  for_each            = var.dns
+  name                = "_dnsauth.${each.value.subdomain}"
+  zone_name           = var.dns_zone[each.key].name
   resource_group_name = var.resource_group_name
   ttl                 = 3600
 
   record {
-    value = azurerm_cdn_frontdoor_custom_domain.this.validation_token
+    value = azurerm_cdn_frontdoor_custom_domain.this[each.key].validation_token
   }
 }
 
 resource "azurerm_dns_cname_record" "afd_cname" {
-  name                = var.custom_domain_host_name
-  zone_name           = var.dns_zone.name
+  for_each            = var.dns
+  name                = each.value.subdomain
+  zone_name           = var.dns_zone[each.key].name
   resource_group_name = var.resource_group_name
   ttl                 = 3600
   record              = azurerm_cdn_frontdoor_endpoint.this.host_name

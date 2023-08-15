@@ -2,6 +2,7 @@
 # Azure DNS
 ################################
 resource "azurerm_dns_zone" "this" {
-  name                = var.dns.dns_zone_name
+  for_each            = var.dns
+  name                = each.value.dns_zone_name
   resource_group_name = var.resource_group_name
 }

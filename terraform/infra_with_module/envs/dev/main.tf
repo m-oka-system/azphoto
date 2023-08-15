@@ -162,8 +162,7 @@ module "frontdoor" {
   frontdoor_firewall_policy      = var.frontdoor_firewall_policy
   frontdoor_firewall_custom_rule = var.frontdoor_firewall_custom_rule
   backend_origins                = local.front_door.backend_origins
-  service_fqdn                   = local.django_app.service_fqdn
-  custom_domain_host_name        = var.dns.custom_domain_host_name
+  dns                            = var.dns
   dns_zone                       = module.dns.dns_zone
 }
 

@@ -2,36 +2,24 @@
 # Private Endpoint
 ################################
 resource "azurerm_private_endpoint" "this" {
-  name                          = "${var.resource_name}-pep"
+  for_each                      = var.private_endpoint
+  name                          = "${each.value.name}-pe"
   resource_group_name           = var.resource_group_name
-  location                      = var.location
-  subnet_id                     = var.subnet_id
-  custom_network_interface_name = "${var.resource_name}-pep-nic"
+  location                      = var.common.location
+  subnet_id                     = var.subnet[each.value.target_subnet].id
+  custom_network_interface_name = "${each.value.name}-pe-nic"
+
+  private_dns_zone_group {
+    name = "default"
+    private_dns_zone_ids = [
+      var.private_dns_zone[each.value.target_private_dns_zone].id
+    ]
+  }
 
   private_service_connection {
     name                           = "connection"
     is_manual_connection           = false
-    private_connection_resource_id = var.private_connection_resource_id
-    subresource_names              = var.subresource_names
+    private_connection_resource_id = each.value.private_connection_resource_id
+    subresource_names              = each.value.subresource_names
   }
-}
-
-resource "azurerm_private_dns_zone" "this" {
-  name                = var.private_dns_zone_name
-  resource_group_name = var.resource_group_name
-}
-
-resource "azurerm_private_dns_zone_virtual_network_link" "this" {
-  name                  = "vnetlink"
-  resource_group_name   = var.resource_group_name
-  private_dns_zone_name = azurerm_private_dns_zone.this.name
-  virtual_network_id    = var.virtual_network_id
-}
-
-resource "azurerm_private_dns_a_record" "this" {
-  name                = var.private_dns_host_name
-  zone_name           = azurerm_private_dns_zone.this.name
-  resource_group_name = var.resource_group_name
-  ttl                 = 300
-  records             = [azurerm_private_endpoint.this.private_service_connection[0].private_ip_address]
 }

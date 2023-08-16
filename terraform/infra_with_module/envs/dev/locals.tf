@@ -78,7 +78,7 @@ locals {
     backend_origins = {
       app = {
         host_name          = module.app_service.app_service["app"].default_hostname
-        origin_host_header = module.app_service.app_service["app"].default_hostname
+        origin_host_header = "${var.dns["app"].subdomain}.${var.dns["app"].dns_zone_name}"
       }
       blob = {
         host_name          = module.storage.storage_account["app"].primary_blob_host

@@ -1,18 +1,31 @@
 variable "common" {
   type = map(string)
   default = {
-    prefix   = "prefix"
-    env      = "env"
+    prefix   = "azphoto"
+    env      = "dev"
     location = "japaneast"
   }
+}
+
+variable "allowed_cidr" {
+  type = list(string)
+}
+
+variable "secret_key" {
+  type = string
+}
+
+variable "sendgrid_api_key" {
+  type = string
+}
+
+variable "default_from_email" {
+  type = string
 }
 
 variable "django_app" {
   type = map(string)
   default = {
-    secret_key                          = "secret_key"
-    sendgrid_api_key                    = "sendgrid_api_key"
-    default_from_email                  = "default_from_email"
     websites_enable_app_service_storage = "False"
     websites_port                       = "8000"
     django_settings_module              = "config.settings.production"
@@ -128,7 +141,7 @@ variable "network_security_group" {
           protocol                   = "Tcp"
           source_port_range          = "*"
           destination_port_range     = "80"
-          source_address_prefixes    = ["100.0.0.1", "100.0.0.2"]
+          source_address_prefixes    = ["MyIP"]
           destination_address_prefix = "*"
         },
         {
@@ -139,7 +152,7 @@ variable "network_security_group" {
           protocol                   = "Tcp"
           source_port_range          = "*"
           destination_port_range     = "443"
-          source_address_prefixes    = ["100.0.0.1", "100.0.0.2"]
+          source_address_prefixes    = ["MyIP"]
           destination_address_prefix = "*"
         },
         {
@@ -150,7 +163,7 @@ variable "network_security_group" {
           protocol                   = "Tcp"
           source_port_range          = "*"
           destination_port_range     = "22"
-          source_address_prefixes    = ["100.0.0.1", "100.0.0.2"]
+          source_address_prefixes    = ["MyIP"]
           destination_address_prefix = "*"
         },
         {
@@ -161,7 +174,7 @@ variable "network_security_group" {
           protocol                   = "Tcp"
           source_port_range          = "*"
           destination_port_range     = "3389"
-          source_address_prefixes    = ["100.0.0.1", "100.0.0.2"]
+          source_address_prefixes    = ["MyIP"]
           destination_address_prefix = "*"
         }
       ]
@@ -173,7 +186,7 @@ variable "dns" {
   type = map(map(string))
   default = {
     app = {
-      dns_zone_name = "example.com"
+      dns_zone_name = "azphoto.xyz"
       subdomain     = "www"
     }
   }
@@ -246,7 +259,7 @@ variable "storage" {
       network_rules = {
         default_action             = "Deny"
         bypass                     = ["AzureServices"]
-        ip_rules                   = ["100.0.0.1"]
+        ip_rules                   = ["MyIP"]
         virtual_network_subnet_ids = []
       }
     }
@@ -298,7 +311,7 @@ variable "key_vault" {
       network_acls = {
         default_action             = "Deny"
         bypass                     = "AzureServices"
-        ip_rules                   = ["100.0.0.1"]
+        ip_rules                   = ["MyIP"]
         virtual_network_subnet_ids = []
       }
     }
@@ -310,8 +323,6 @@ variable "mysql" {
     name                         = string
     target_vnet                  = string
     target_subnet                = string
-    db_username                  = string
-    db_password                  = string
     db_port                      = number
     db_size                      = string
     version                      = string
@@ -329,8 +340,6 @@ variable "mysql" {
       name                         = "mysql"
       target_vnet                  = "spoke1"
       target_subnet                = "db"
-      db_username                  = "db_username"
-      db_password                  = "db_password"
       db_port                      = 3306
       db_size                      = "B_Standard_B1s"
       version                      = "8.0.21"
@@ -346,11 +355,19 @@ variable "mysql" {
   }
 }
 
+variable "db_username" {
+  type = string
+}
+
+variable "db_password" {
+  type = string
+}
+
 variable "database" {
   type = map(map(string))
   default = {
     app = {
-      name                = "MyDatabase"
+      name                = "photo"
       target_mysql_server = "app"
       charset             = "utf8mb4"
       collation           = "utf8mb4_0900_ai_ci"
@@ -396,14 +413,12 @@ variable "private_dns_zone" {
 
 variable "vm" {
   type = map(object({
-    name              = string
-    target_subnet     = string
-    vm_size           = string
-    vm_admin_username = string
-    public_key        = string
-    os_disk_cache     = string
-    os_disk_type      = string
-    os_disk_size      = number
+    name          = string
+    target_subnet = string
+    vm_size       = string
+    os_disk_cache = string
+    os_disk_type  = string
+    os_disk_size  = number
     source_image_reference = object({
       offer     = string
       publisher = string
@@ -418,14 +433,12 @@ variable "vm" {
   }))
   default = {
     jumpbox = {
-      name              = "linux-vm"
-      target_subnet     = "vm"
-      vm_size           = "Standard_DS1_v2"
-      vm_admin_username = "azureuser"
-      public_key        = "public_key"
-      os_disk_cache     = "ReadWrite"
-      os_disk_type      = "Standard_LRS"
-      os_disk_size      = 30
+      name          = "linux-vm"
+      target_subnet = "vm"
+      vm_size       = "Standard_DS1_v2"
+      os_disk_cache = "ReadWrite"
+      os_disk_type  = "Standard_LRS"
+      os_disk_size  = 30
       source_image_reference = {
         offer     = "0001-com-ubuntu-server-focal"
         publisher = "canonical"
@@ -439,6 +452,14 @@ variable "vm" {
       }
     }
   }
+}
+
+variable "vm_admin_username" {
+  type = string
+}
+
+variable "public_key" {
+  type = string
 }
 
 variable "container_registry" {
@@ -524,7 +545,7 @@ variable "app_service" {
           name        = "AllowMyIP"
           priority    = 200
           action      = "Allow"
-          ip_address  = "100.0.0.1/32"
+          ip_address  = "MyIP"
           service_tag = null
         }
       }
@@ -540,7 +561,7 @@ variable "app_service" {
           name        = "AllowMyIP"
           priority    = 200
           action      = "Allow"
-          ip_address  = "100.0.0.1/32"
+          ip_address  = "MyIP"
           service_tag = null
         }
       }
@@ -748,7 +769,7 @@ variable "frontdoor_firewall_custom_rule" {
     clientip = {
       rule_name    = "AllowClientIP"
       priority     = 100
-      match_values = ["100.0.0.1", "100.0.0.2"]
+      match_values = ["MyIP"]
     }
   }
 }

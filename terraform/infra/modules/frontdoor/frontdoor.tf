@@ -128,56 +128,56 @@ resource "azurerm_dns_cname_record" "afd_cname" {
   record              = azurerm_cdn_frontdoor_endpoint.this[each.key].host_name
 }
 
-# # Web Application Firewall
-# resource "azurerm_cdn_frontdoor_security_policy" "this" {
-#   for_each                 = var.frontdoor_security_policy
-#   name                     = "${local.front_door_profile_name}-${each.value.name}-secpolicy"
-#   cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this[each.value.target_frontdoor_profile].id
+# Web Application Firewall
+resource "azurerm_cdn_frontdoor_security_policy" "this" {
+  for_each                 = var.frontdoor_security_policy
+  name                     = "${local.front_door_profile_name}-${each.value.name}-secpolicy"
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.this[each.value.target_frontdoor_profile].id
 
-#   security_policies {
-#     firewall {
-#       cdn_frontdoor_firewall_policy_id = azurerm_cdn_frontdoor_firewall_policy.this[each.value.target_firewall_policy].id
+  security_policies {
+    firewall {
+      cdn_frontdoor_firewall_policy_id = azurerm_cdn_frontdoor_firewall_policy.this[each.value.target_firewall_policy].id
 
-#       association {
-#         dynamic "domain" {
-#           for_each = var.frontdoor_endpoint
+      association {
+        dynamic "domain" {
+          for_each = var.frontdoor_endpoint
 
-#           content {
-#             cdn_frontdoor_domain_id = azurerm_cdn_frontdoor_endpoint.this[each.key].id
-#           }
-#         }
+          content {
+            cdn_frontdoor_domain_id = azurerm_cdn_frontdoor_endpoint.this[each.key].id
+          }
+        }
 
-#         patterns_to_match = ["/*"]
-#       }
-#     }
-#   }
-# }
+        patterns_to_match = ["/*"]
+      }
+    }
+  }
+}
 
-# resource "azurerm_cdn_frontdoor_firewall_policy" "this" {
-#   for_each                          = var.frontdoor_firewall_policy
-#   name                              = each.value.name
-#   resource_group_name               = var.resource_group_name
-#   sku_name                          = each.value.sku_name
-#   enabled                           = true
-#   mode                              = each.value.mode
-#   custom_block_response_status_code = each.value.custom_block_response_status_code
+resource "azurerm_cdn_frontdoor_firewall_policy" "this" {
+  for_each                          = var.frontdoor_firewall_policy
+  name                              = each.value.name
+  resource_group_name               = var.resource_group_name
+  sku_name                          = each.value.sku_name
+  enabled                           = true
+  mode                              = each.value.mode
+  custom_block_response_status_code = each.value.custom_block_response_status_code
 
-#   dynamic "custom_rule" {
-#     for_each = var.frontdoor_firewall_custom_rule
+  dynamic "custom_rule" {
+    for_each = var.frontdoor_firewall_custom_rule
 
-#     content {
-#       name     = custom_rule.value.rule_name
-#       enabled  = true
-#       priority = custom_rule.value.priority
-#       type     = "MatchRule"
-#       action   = "Block"
+    content {
+      name     = custom_rule.value.rule_name
+      enabled  = true
+      priority = custom_rule.value.priority
+      type     = "MatchRule"
+      action   = "Block"
 
-#       match_condition {
-#         match_variable     = "RemoteAddr"
-#         operator           = "IPMatch"
-#         negation_condition = true # 含まない場合
-#         match_values       = custom_rule.value.match_values
-#       }
-#     }
-#   }
-# }
+      match_condition {
+        match_variable     = "RemoteAddr"
+        operator           = "IPMatch"
+        negation_condition = true # 含まない場合
+        match_values       = join(",", lookup(custom_rule.value, "match_values", null)) == "MyIP" ? var.allowed_cidr : lookup(custom_rule.value, "match_values", null)
+      }
+    }
+  }
+}

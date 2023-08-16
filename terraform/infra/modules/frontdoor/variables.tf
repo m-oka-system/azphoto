@@ -8,6 +8,7 @@ variable "frontdoor_route" {}
 variable "frontdoor_security_policy" {}
 variable "frontdoor_firewall_policy" {}
 variable "frontdoor_firewall_custom_rule" {}
+variable "allowed_cidr" {}
 variable "backend_origins" {}
 variable "dns" {}
 variable "dns_zone" {}

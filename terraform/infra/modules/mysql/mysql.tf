@@ -6,8 +6,8 @@ resource "azurerm_mysql_flexible_server" "this" {
   name                   = "${var.common.prefix}-${var.common.env}-${each.value.name}-${var.random}"
   resource_group_name    = var.resource_group_name
   location               = var.common.location
-  administrator_login    = each.value.db_username
-  administrator_password = each.value.db_password
+  administrator_login    = var.db_username
+  administrator_password = var.db_password
   sku_name               = each.value.db_size
   version                = each.value.version
   zone                   = each.value.zone

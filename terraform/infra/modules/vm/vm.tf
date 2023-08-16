@@ -32,7 +32,7 @@ resource "azurerm_linux_virtual_machine" "this" {
   resource_group_name = var.resource_group_name
   location            = var.common.location
   size                = each.value.vm_size
-  admin_username      = each.value.vm_admin_username
+  admin_username      = var.vm_admin_username
   network_interface_ids = [
     azurerm_network_interface.this[each.key].id,
   ]
@@ -50,8 +50,8 @@ resource "azurerm_linux_virtual_machine" "this" {
   custom_data                     = filebase64("${path.module}/userdata.sh")
 
   admin_ssh_key {
-    username   = each.value.vm_admin_username
-    public_key = each.value.public_key
+    username   = var.vm_admin_username
+    public_key = var.public_key
   }
 
   boot_diagnostics {}

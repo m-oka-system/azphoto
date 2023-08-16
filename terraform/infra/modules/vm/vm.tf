@@ -51,7 +51,7 @@ resource "azurerm_linux_virtual_machine" "this" {
 
   admin_ssh_key {
     username   = each.value.vm_admin_username
-    public_key = file("~/.ssh/id_rsa.pub")
+    public_key = each.value.public_key
   }
 
   boot_diagnostics {}

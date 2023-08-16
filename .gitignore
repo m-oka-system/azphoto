@@ -5,10 +5,11 @@ db.sqlite3
 
 # Terraform
 terraform.tfvars
-terraform.tfstate
+terraform.tfstate*
 terraform.tfstate.backup
 .terraform
 .terraformrc
+.tflint.hcl
 
 # Githubactions(local debug using act)
 .secrets

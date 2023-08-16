@@ -1,0 +1,13 @@
+variable "common" {}
+variable "resource_group_name" {}
+variable "frontdoor_profile" {}
+variable "frontdoor_endpoint" {}
+variable "frontdoor_origin_group" {}
+variable "frontdoor_origin" {}
+variable "frontdoor_route" {}
+variable "frontdoor_security_policy" {}
+variable "frontdoor_firewall_policy" {}
+variable "frontdoor_firewall_custom_rule" {}
+variable "backend_origins" {}
+variable "dns" {}
+variable "dns_zone" {}

@@ -400,6 +400,7 @@ variable "vm" {
     target_subnet     = string
     vm_size           = string
     vm_admin_username = string
+    public_key        = string
     os_disk_cache     = string
     os_disk_type      = string
     os_disk_size      = number
@@ -421,6 +422,7 @@ variable "vm" {
       target_subnet     = "vm"
       vm_size           = "Standard_DS1_v2"
       vm_admin_username = "azureuser"
+      public_key        = "public_key"
       os_disk_cache     = "ReadWrite"
       os_disk_type      = "Standard_LRS"
       os_disk_size      = 30

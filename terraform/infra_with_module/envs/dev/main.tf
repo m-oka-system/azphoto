@@ -203,3 +203,11 @@ module "application_insights" {
   application_insights = var.application_insights
   log_analytics        = module.log_analytics.log_analytics
 }
+
+module "diagnostic_setting" {
+  source = "../../modules/diagnostic_setting"
+
+  common                  = var.common
+  diagnostic_setting      = local.diagnostic_setting
+  log_analytics_workspace = module.log_analytics.log_analytics
+}

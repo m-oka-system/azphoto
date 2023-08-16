@@ -86,4 +86,18 @@ locals {
       }
     }
   }
+
+  diagnostic_setting = {
+    target_log_analytics_workspace = "logs"
+    target_resources = merge(
+      { for k, v in module.storage.storage_account : format("storage_account_%s", k) => v.id },
+      { for k, v in module.storage.storage_account : format("blob_%s", k) => format("%s/blobServices/default", v.id) },
+      { for k, v in module.key_vault.key_vault : format("key_vault_%s", k) => v.id },
+      { for k, v in module.mysql.mysql : format("mysql_%s", k) => v.id },
+      { for k, v in module.redis.redis : format("redis_%s", k) => v.id },
+      { for k, v in module.container_registry.container_registry : format("container_registry_%s", k) => v.id },
+      { for k, v in module.app_service.app_service : format("app_service_%s", k) => v.id },
+      { for k, v in module.frontdoor.frontdoor_profile : format("frontdoor_%s", k) => v.id },
+    )
+  }
 }

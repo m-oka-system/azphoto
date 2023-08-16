@@ -1,9 +1,9 @@
-# terraform {
-#   cloud {
-#     organization = "m-oka-system"
+terraform {
+  cloud {
+    organization = "m-oka-system"
 
-#     workspaces {
-#       name = "azphoto"
-#     }
-#   }
-# }
+    workspaces {
+      name = "azphoto"
+    }
+  }
+}

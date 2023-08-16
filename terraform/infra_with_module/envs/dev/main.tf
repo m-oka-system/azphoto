@@ -59,6 +59,33 @@ module "dns" {
   dns                 = var.dns
 }
 
+module "user_assigned_identity" {
+  source = "../../modules/user_assigned_identity"
+
+  common                 = var.common
+  resource_group_name    = module.resource_group.resource_group_name
+  subscription_id        = local.common.subscription_id
+  user_assigned_identity = var.user_assigned_identity
+  role_assignment        = var.role_assignment
+}
+
+module "log_analytics" {
+  source = "../../modules/log_analytics"
+
+  common              = var.common
+  resource_group_name = module.resource_group.resource_group_name
+  log_analytics       = var.log_analytics
+}
+
+module "application_insights" {
+  source = "../../modules/application_insights"
+
+  common               = var.common
+  resource_group_name  = module.resource_group.resource_group_name
+  application_insights = var.application_insights
+  log_analytics        = module.log_analytics.log_analytics
+}
+
 module "storage" {
   source = "../../modules/storage"
 
@@ -175,33 +202,6 @@ module "frontdoor" {
   backend_origins                = local.front_door.backend_origins
   dns                            = var.dns
   dns_zone                       = module.dns.dns_zone
-}
-
-module "user_assigned_identity" {
-  source = "../../modules/user_assigned_identity"
-
-  common                 = var.common
-  resource_group_name    = module.resource_group.resource_group_name
-  subscription_id        = local.common.subscription_id
-  user_assigned_identity = var.user_assigned_identity
-  role_assignment        = var.role_assignment
-}
-
-module "log_analytics" {
-  source = "../../modules/log_analytics"
-
-  common              = var.common
-  resource_group_name = module.resource_group.resource_group_name
-  log_analytics       = var.log_analytics
-}
-
-module "application_insights" {
-  source = "../../modules/application_insights"
-
-  common               = var.common
-  resource_group_name  = module.resource_group.resource_group_name
-  application_insights = var.application_insights
-  log_analytics        = module.log_analytics.log_analytics
 }
 
 module "diagnostic_setting" {

@@ -1,9 +1,9 @@
 terraform {
-  required_version = "~> 1.4.5"
+  required_version = "~> 1.5.0"
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>3.57.0"
+      version = "~>3.65.0"
     }
     azuread = {
       source  = "hashicorp/azuread"
@@ -83,6 +83,7 @@ data "tfe_organization" "org" {
 resource "tfe_workspace" "infra" {
   name                  = var.tfc_workspace_name
   organization          = data.tfe_organization.org.name
+  working_directory     = "envs/dev"
   auto_apply            = false
   file_triggers_enabled = false
   queue_all_runs        = false
@@ -121,6 +122,15 @@ resource "tfe_variable" "azure_tenant_id" {
   sensitive    = true
 }
 
+resource "tfe_variable" "allowed_cidr" {
+  key          = "allowed_cidr"
+  value        = jsonencode(var.allowed_cidr)
+  category     = "terraform"
+  workspace_id = tfe_workspace.infra.id
+  sensitive    = true
+  hcl          = true
+}
+
 resource "tfe_variable" "secret_key" {
   key          = "secret_key"
   value        = var.secret_key
@@ -145,22 +155,6 @@ resource "tfe_variable" "default_from_email" {
   sensitive    = true
 }
 
-resource "tfe_variable" "dns_zone_name" {
-  key          = "dns_zone_name"
-  value        = var.dns_zone_name
-  category     = "terraform"
-  workspace_id = tfe_workspace.infra.id
-  sensitive    = true
-}
-
-resource "tfe_variable" "db_name" {
-  key          = "db_name"
-  value        = var.db_name
-  category     = "terraform"
-  workspace_id = tfe_workspace.infra.id
-  sensitive    = true
-}
-
 resource "tfe_variable" "db_username" {
   key          = "db_username"
   value        = var.db_username
@@ -172,6 +166,22 @@ resource "tfe_variable" "db_username" {
 resource "tfe_variable" "db_password" {
   key          = "db_password"
   value        = var.db_password
+  category     = "terraform"
+  workspace_id = tfe_workspace.infra.id
+  sensitive    = true
+}
+
+resource "tfe_variable" "vm_admin_username" {
+  key          = "vm_admin_username"
+  value        = var.vm_admin_username
+  category     = "terraform"
+  workspace_id = tfe_workspace.infra.id
+  sensitive    = true
+}
+
+resource "tfe_variable" "public_key" {
+  key          = "public_key"
+  value        = var.public_key
   category     = "terraform"
   workspace_id = tfe_workspace.infra.id
   sensitive    = true

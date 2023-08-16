@@ -39,6 +39,10 @@ variable "tfc_encrypted_token" {
 }
 
 # Application and Infrastructure
+variable "allowed_cidr" {
+  type = list(string)
+}
+
 variable "secret_key" {
   type = string
 }
@@ -51,18 +55,18 @@ variable "default_from_email" {
   type = string
 }
 
-variable "dns_zone_name" {
-  type = string
-}
-
-variable "db_name" {
-  type = string
-}
-
 variable "db_username" {
   type = string
 }
 
 variable "db_password" {
+  type = string
+}
+
+variable "vm_admin_username" {
+  type = string
+}
+
+variable "public_key" {
   type = string
 }

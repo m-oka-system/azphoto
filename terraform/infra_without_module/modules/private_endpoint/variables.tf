@@ -1,0 +1,11 @@
+variable "prefix" {}
+variable "env" {}
+variable "resource_group_name" {}
+variable "location" {}
+variable "resource_name" {}
+variable "private_connection_resource_id" {}
+variable "virtual_network_id" {}
+variable "subnet_id" {}
+variable "subresource_names" {}
+variable "private_dns_zone_name" {}
+variable "private_dns_host_name" {}

@@ -2,6 +2,8 @@ variable "common" {}
 variable "resource_group_name" {}
 variable "random" {}
 variable "mysql" {}
+variable "db_username" {}
+variable "db_password" {}
 variable "database" {}
 variable "vnet" {}
 variable "subnet" {}

@@ -45,7 +45,7 @@ resource "azurerm_linux_web_app" "this" {
         name        = ip_restriction.value.name
         priority    = ip_restriction.value.priority
         action      = ip_restriction.value.action
-        ip_address  = ip_restriction.value.ip_address
+        ip_address  = lookup(ip_restriction.value, "ip_address", null) == "MyIP" ? join(",", var.allowed_cidr) : lookup(ip_restriction.value, "ip_address", null)
         service_tag = ip_restriction.value.service_tag
 
         dynamic "headers" {
@@ -70,7 +70,7 @@ resource "azurerm_linux_web_app" "this" {
         name        = scm_ip_restriction.value.name
         priority    = scm_ip_restriction.value.priority
         action      = scm_ip_restriction.value.action
-        ip_address  = scm_ip_restriction.value.ip_address
+        ip_address  = lookup(scm_ip_restriction.value, "ip_address", null) == "MyIP" ? join(",", var.allowed_cidr) : lookup(scm_ip_restriction.value, "ip_address", null)
         service_tag = scm_ip_restriction.value.service_tag
       }
     }

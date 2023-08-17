@@ -50,6 +50,7 @@ module "network_security_group" {
   resource_group_name    = module.resource_group.resource_group_name
   network_security_group = var.network_security_group
   subnet                 = module.network.subnet
+  allowed_cidr           = var.allowed_cidr
 }
 
 module "dns" {
@@ -94,6 +95,7 @@ module "storage" {
   random              = local.common.random
   storage             = var.storage
   blob_container      = var.blob_container
+  allowed_cidr        = var.allowed_cidr
 }
 
 module "key_vault" {
@@ -102,6 +104,7 @@ module "key_vault" {
   common              = var.common
   resource_group_name = module.resource_group.resource_group_name
   key_vault           = var.key_vault
+  allowed_cidr        = var.allowed_cidr
   tenant_id           = local.common.tenant_id
 }
 
@@ -120,6 +123,8 @@ module "mysql" {
   resource_group_name = module.resource_group.resource_group_name
   random              = local.common.random
   mysql               = var.mysql
+  db_username         = var.db_username
+  db_password         = var.db_password
   database            = var.database
   vnet                = module.network.vnet
   subnet              = module.network.subnet
@@ -160,6 +165,8 @@ module "vm" {
   common              = var.common
   resource_group_name = module.resource_group.resource_group_name
   vm                  = var.vm
+  vm_admin_username   = var.vm_admin_username
+  public_key          = var.public_key
   subnet              = module.network.subnet
 }
 
@@ -179,6 +186,7 @@ module "app_service" {
   service_plan        = var.service_plan
   app_service         = var.app_service
   app_settings        = local.app_service.app_settings
+  allowed_cidr        = var.allowed_cidr
   subnet              = module.network.subnet
   identity            = module.user_assigned_identity.user_assigned_identity
   frontdoor_profile   = module.frontdoor.frontdoor_profile
@@ -199,6 +207,7 @@ module "frontdoor" {
   frontdoor_security_policy      = var.frontdoor_security_policy
   frontdoor_firewall_policy      = var.frontdoor_firewall_policy
   frontdoor_firewall_custom_rule = var.frontdoor_firewall_custom_rule
+  allowed_cidr                   = var.allowed_cidr
   backend_origins                = local.front_door.backend_origins
   dns                            = var.dns
   dns_zone                       = module.dns.dns_zone

@@ -1,5 +1,5 @@
 variable "common" {}
 variable "resource_group_name" {}
-variable "private_endpoint" {}
+variable "network_security_group" {}
 variable "subnet" {}
-variable "private_dns_zone" {}
+variable "allowed_cidr" {}

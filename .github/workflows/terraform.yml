@@ -18,11 +18,14 @@ on:
 
 jobs:
   terraform:
-    name: "Terraform"
+    name: "Terraform - ${{ matrix.envs }}"
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        envs: [dev]
     defaults:
       run:
-        working-directory: ./terraform/infra
+        working-directory: ./terraform/infra/envs/${{ matrix.envs }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -35,6 +38,7 @@ jobs:
       - name: Terraform Format
         id: fmt
         run: terraform fmt -check
+        working-directory: ./terraform/infra
 
       - name: Terraform Init
         id: init

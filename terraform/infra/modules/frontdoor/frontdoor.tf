@@ -176,7 +176,7 @@ resource "azurerm_cdn_frontdoor_firewall_policy" "this" {
         match_variable     = "RemoteAddr"
         operator           = "IPMatch"
         negation_condition = true # 含まない場合
-        match_values       = join(",", lookup(custom_rule.value, "match_values", null)) == "MyIP" ? var.allowed_cidr : lookup(custom_rule.value, "match_values", null)
+        match_values       = join(",", lookup(custom_rule.value, "match_values", null)) == "MyIP" ? split(",", var.allowed_cidr) : lookup(custom_rule.value, "match_values", null)
       }
     }
   }

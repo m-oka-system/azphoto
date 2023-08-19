@@ -33,6 +33,8 @@ jobs:
   terraform:
     name: "Terraform - ${{ matrix.envs }}"
     runs-on: ubuntu-latest
+    environment:
+      name: development
     strategy:
       matrix:
         envs: [dev]

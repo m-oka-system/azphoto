@@ -13,7 +13,9 @@ on:
       - ".github/workflows/terraform.yml"
   workflow_dispatch:
 
-# permissions:
+permissions:
+  id-token: write
+  contents: read
 #   pull-requests: write
 
 env:

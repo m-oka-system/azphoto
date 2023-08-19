@@ -4,5 +4,6 @@ terraform {
     storage_account_name = "tfstate28226"
     container_name       = "azphoto"
     key                  = "dev.terraform.tfstate"
+    use_oidc             = true
   }
 }

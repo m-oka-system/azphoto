@@ -83,115 +83,172 @@ data "tfe_organization" "org" {
 resource "tfe_workspace" "infra" {
   name                  = var.tfc_workspace_name
   organization          = data.tfe_organization.org.name
-  working_directory     = "envs/dev"
   auto_apply            = false
   file_triggers_enabled = false
   queue_all_runs        = false
-  execution_mode        = "remote"
+  execution_mode        = "local"
 }
 
-# Workspace variables
-resource "tfe_variable" "azure_provider_auth" {
-  key          = "TFC_AZURE_PROVIDER_AUTH"
-  value        = true
-  category     = "env"
-  workspace_id = tfe_workspace.infra.id
-}
+# resource "tfe_workspace" "infra" {
+#   name                  = var.tfc_workspace_name
+#   organization          = data.tfe_organization.org.name
+#   working_directory     = "envs/dev"
+#   auto_apply            = false
+#   file_triggers_enabled = false
+#   queue_all_runs        = false
+#   execution_mode        = "remote"
+# }
 
-resource "tfe_variable" "azure_client_id" {
-  key          = "TFC_AZURE_RUN_CLIENT_ID"
-  value        = azuread_application.tfc_application.application_id
-  category     = "env"
-  workspace_id = tfe_workspace.infra.id
-  sensitive    = true
-}
+# # Workspace variables
+# resource "tfe_variable" "azure_provider_auth" {
+#   key          = "TFC_AZURE_PROVIDER_AUTH"
+#   value        = true
+#   category     = "env"
+#   workspace_id = tfe_workspace.infra.id
+# }
 
-resource "tfe_variable" "azure_subscription_id" {
-  key          = "ARM_SUBSCRIPTION_ID"
-  value        = data.azurerm_subscription.current.subscription_id
-  category     = "env"
-  workspace_id = tfe_workspace.infra.id
-  sensitive    = true
-}
+# resource "tfe_variable" "azure_client_id" {
+#   key          = "TFC_AZURE_RUN_CLIENT_ID"
+#   value        = azuread_application.tfc_application.application_id
+#   category     = "env"
+#   workspace_id = tfe_workspace.infra.id
+#   sensitive    = true
+# }
 
-resource "tfe_variable" "azure_tenant_id" {
-  key          = "ARM_TENANT_ID"
-  value        = data.azurerm_subscription.current.tenant_id
-  category     = "env"
-  workspace_id = tfe_workspace.infra.id
-  sensitive    = true
-}
+# resource "tfe_variable" "azure_subscription_id" {
+#   key          = "ARM_SUBSCRIPTION_ID"
+#   value        = data.azurerm_subscription.current.subscription_id
+#   category     = "env"
+#   workspace_id = tfe_workspace.infra.id
+#   sensitive    = true
+# }
 
-resource "tfe_variable" "allowed_cidr" {
-  key          = "allowed_cidr"
-  value        = jsonencode(var.allowed_cidr)
-  category     = "terraform"
-  workspace_id = tfe_workspace.infra.id
-  sensitive    = true
-  hcl          = true
-}
+# resource "tfe_variable" "azure_tenant_id" {
+#   key          = "ARM_TENANT_ID"
+#   value        = data.azurerm_subscription.current.tenant_id
+#   category     = "env"
+#   workspace_id = tfe_workspace.infra.id
+#   sensitive    = true
+# }
 
-resource "tfe_variable" "secret_key" {
-  key          = "secret_key"
-  value        = var.secret_key
-  category     = "terraform"
-  workspace_id = tfe_workspace.infra.id
-  sensitive    = true
-}
+# resource "tfe_variable" "allowed_cidr" {
+#   key          = "allowed_cidr"
+#   value        = jsonencode(var.allowed_cidr)
+#   category     = "terraform"
+#   workspace_id = tfe_workspace.infra.id
+#   sensitive    = true
+#   hcl          = true
+# }
 
-resource "tfe_variable" "sendgrid_api_key" {
-  key          = "sendgrid_api_key"
-  value        = var.sendgrid_api_key
-  category     = "terraform"
-  workspace_id = tfe_workspace.infra.id
-  sensitive    = true
-}
+# resource "tfe_variable" "secret_key" {
+#   key          = "secret_key"
+#   value        = var.secret_key
+#   category     = "terraform"
+#   workspace_id = tfe_workspace.infra.id
+#   sensitive    = true
+# }
 
-resource "tfe_variable" "default_from_email" {
-  key          = "default_from_email"
-  value        = var.default_from_email
-  category     = "terraform"
-  workspace_id = tfe_workspace.infra.id
-  sensitive    = true
-}
+# resource "tfe_variable" "sendgrid_api_key" {
+#   key          = "sendgrid_api_key"
+#   value        = var.sendgrid_api_key
+#   category     = "terraform"
+#   workspace_id = tfe_workspace.infra.id
+#   sensitive    = true
+# }
 
-resource "tfe_variable" "db_username" {
-  key          = "db_username"
-  value        = var.db_username
-  category     = "terraform"
-  workspace_id = tfe_workspace.infra.id
-  sensitive    = true
-}
+# resource "tfe_variable" "default_from_email" {
+#   key          = "default_from_email"
+#   value        = var.default_from_email
+#   category     = "terraform"
+#   workspace_id = tfe_workspace.infra.id
+#   sensitive    = true
+# }
 
-resource "tfe_variable" "db_password" {
-  key          = "db_password"
-  value        = var.db_password
-  category     = "terraform"
-  workspace_id = tfe_workspace.infra.id
-  sensitive    = true
-}
+# resource "tfe_variable" "db_username" {
+#   key          = "db_username"
+#   value        = var.db_username
+#   category     = "terraform"
+#   workspace_id = tfe_workspace.infra.id
+#   sensitive    = true
+# }
 
-resource "tfe_variable" "vm_admin_username" {
-  key          = "vm_admin_username"
-  value        = var.vm_admin_username
-  category     = "terraform"
-  workspace_id = tfe_workspace.infra.id
-  sensitive    = true
-}
+# resource "tfe_variable" "db_password" {
+#   key          = "db_password"
+#   value        = var.db_password
+#   category     = "terraform"
+#   workspace_id = tfe_workspace.infra.id
+#   sensitive    = true
+# }
 
-resource "tfe_variable" "public_key" {
-  key          = "public_key"
-  value        = var.public_key
-  category     = "terraform"
-  workspace_id = tfe_workspace.infra.id
-  sensitive    = true
-}
+# resource "tfe_variable" "vm_admin_username" {
+#   key          = "vm_admin_username"
+#   value        = var.vm_admin_username
+#   category     = "terraform"
+#   workspace_id = tfe_workspace.infra.id
+#   sensitive    = true
+# }
+
+# resource "tfe_variable" "public_key" {
+#   key          = "public_key"
+#   value        = var.public_key
+#   category     = "terraform"
+#   workspace_id = tfe_workspace.infra.id
+#   sensitive    = true
+# }
 
 ##################################
 # GitHub
 ##################################
-resource "github_actions_secret" "tf_api_token" {
+# resource "github_actions_secret" "tf_api_token" {
+#   repository      = var.github_repo_name
+#   secret_name     = "TF_API_TOKEN"
+#   encrypted_value = var.tfc_encrypted_token # gh secret set TF_API_TOKEN --no-store
+# }
+
+resource "github_actions_secret" "allowed_cidr" {
   repository      = var.github_repo_name
-  secret_name     = "TF_API_TOKEN"
-  encrypted_value = var.tfc_encrypted_token # gh secret set TF_API_TOKEN --no-store
+  secret_name     = "ALLOWED_CIDR"
+  plaintext_value = var.allowed_cidr
+}
+
+resource "github_actions_secret" "secret_key" {
+  repository      = var.github_repo_name
+  secret_name     = "SECRET_KEY"
+  plaintext_value = var.secret_key
+}
+
+resource "github_actions_secret" "sendgrid_api_key" {
+  repository      = var.github_repo_name
+  secret_name     = "SENDGRID_API_KEY"
+  plaintext_value = var.sendgrid_api_key
+}
+
+resource "github_actions_secret" "default_from_email" {
+  repository      = var.github_repo_name
+  secret_name     = "DEFAULT_FROM_EMAIL"
+  plaintext_value = var.default_from_email
+}
+
+resource "github_actions_secret" "db_username" {
+  repository      = var.github_repo_name
+  secret_name     = "DB_USERNAME"
+  plaintext_value = var.db_username
+}
+
+resource "github_actions_secret" "db_password" {
+  repository      = var.github_repo_name
+  secret_name     = "DB_PASSWORD"
+  plaintext_value = var.db_password
+}
+
+resource "github_actions_secret" "vm_admin_username" {
+  repository      = var.github_repo_name
+  secret_name     = "VM_ADMIN_USERNAME"
+  plaintext_value = var.vm_admin_username
+}
+
+resource "github_actions_secret" "public_key" {
+  repository      = var.github_repo_name
+  secret_name     = "PUBLIC_KEY"
+  plaintext_value = var.public_key
 }

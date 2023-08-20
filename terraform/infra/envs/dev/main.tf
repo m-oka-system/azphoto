@@ -220,3 +220,5 @@ module "diagnostic_setting" {
   diagnostic_setting      = local.diagnostic_setting
   log_analytics_workspace = module.log_analytics.log_analytics
 }
+
+resource "null_resource" "example" {}

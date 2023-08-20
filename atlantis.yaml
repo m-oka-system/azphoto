@@ -1,0 +1,10 @@
+version: 3
+automerge: true
+projects:
+  - name: development
+    dir: terraform/infra/envs/dev
+    workspace: default
+    terraform_version: v1.5.5
+    autoplan:
+      enabled: true
+      when_modified: ["*.tf", "../../modules/**/*.tf"]

@@ -20,14 +20,14 @@ permissions:
 
 env:
   TF_VERSION: 1.5.3
-  TF_VAR_allowed_cidr: ${ secrets.ALLOWED_CIDR }
-  TF_VAR_secret_key: ${ secrets.SECRET_KEY }
-  TF_VAR_sendgrid_api_key: ${ secrets.SENDGRID_API_KEY }
-  TF_VAR_default_from_email: ${ secrets.DEFAULT_FROM_EMAIL }
-  TF_VAR_db_username: ${ secrets.DB_USERNAME }
-  TF_VAR_db_password: ${ secrets.DB_PASSWORD }
-  TF_VAR_vm_admin_username: ${ secrets.VM_ADMIN_USERNAME }
-  TF_VAR_public_key: ${ secrets.PUBLIC_KEY }
+  TF_VAR_allowed_cidr: ${{ secrets.ALLOWED_CIDR }}
+  TF_VAR_secret_key: ${{ secrets.SECRET_KEY }}
+  TF_VAR_sendgrid_api_key: ${{ secrets.SENDGRID_API_KEY }}
+  TF_VAR_default_from_email: ${{ secrets.DEFAULT_FROM_EMAIL }}
+  TF_VAR_db_username: ${{ secrets.DB_USERNAME }}
+  TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+  TF_VAR_vm_admin_username: ${{ secrets.VM_ADMIN_USERNAME }}
+  TF_VAR_public_key: ${{ secrets.PUBLIC_KEY }}
 
 jobs:
   terraform:

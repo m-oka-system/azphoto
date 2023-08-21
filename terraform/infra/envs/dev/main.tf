@@ -20,6 +20,12 @@ provider "azurerm" {
   }
 }
 
+provider "http" {}
+
+data "http" "ipify" {
+  url = "http://api.ipify.org"
+}
+
 data "azurerm_subscription" "primary" {}
 
 resource "random_integer" "num" {
@@ -96,6 +102,7 @@ module "storage" {
   storage             = var.storage
   blob_container      = var.blob_container
   allowed_cidr        = var.allowed_cidr
+  client_ip_address   = local.common.client_ip_address
 }
 
 module "key_vault" {
@@ -105,6 +112,7 @@ module "key_vault" {
   resource_group_name = module.resource_group.resource_group_name
   key_vault           = var.key_vault
   allowed_cidr        = var.allowed_cidr
+  client_ip_address   = local.common.client_ip_address
   tenant_id           = local.common.tenant_id
 }
 

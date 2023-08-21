@@ -8,7 +8,7 @@ variable "common" {
 }
 
 variable "allowed_cidr" {
-  type = list(string)
+  type = string
 }
 
 variable "secret_key" {

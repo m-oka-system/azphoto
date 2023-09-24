@@ -850,3 +850,18 @@ variable "application_insights" {
     }
   }
 }
+
+variable "microsoft_teams" {
+  type = map(string)
+}
+
+variable "action_group" {
+  type = object({
+    receiver_name           = string
+    use_common_alert_schema = bool
+  })
+  default = {
+    receiver_name           = "teams-notify"
+    use_common_alert_schema = true
+  }
+}

@@ -228,3 +228,14 @@ module "diagnostic_setting" {
   diagnostic_setting      = local.diagnostic_setting
   log_analytics_workspace = module.log_analytics.log_analytics
 }
+
+module "alert_rule" {
+  source = "../../modules/alert_rule"
+
+  common              = var.common
+  resource_group_name = module.resource_group.resource_group_name
+  microsoft_teams     = var.microsoft_teams
+  action_group        = var.action_group
+  metric_alert        = local.metric_alert
+  activity_log_alert  = local.activity_log_alert
+}

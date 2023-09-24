@@ -101,4 +101,33 @@ locals {
       { for k, v in module.frontdoor.frontdoor_profile : format("frontdoor_%s", k) => v.id },
     )
   }
+
+  # Alert rule
+  metric_alert = {
+    plan_cpu_average = {
+      name        = module.app_service.app_service_plan["app"].name
+      scope_id    = module.app_service.app_service_plan["app"].id
+      severity    = 3
+      frequency   = "PT1M"
+      window_size = "PT5M"
+      criteria = {
+        metric_namespace = "Microsoft.Web/serverfarms"
+        metric_name      = "CpuPercentage"
+        aggregation      = "Average"
+        operator         = "GreaterThan"
+        threshold        = 80
+      }
+    }
+  }
+
+  activity_log_alert = {
+    web_app_restart = {
+      name     = "${module.app_service.app_service_plan["app"].name}_Restart_Web_App_Restart"
+      scope_id = module.app_service.app_service_plan["app"].id
+      criteria = {
+        operation_name = "Microsoft.Web/serverfarms/restartSites/Action"
+        category       = "Administrative"
+      }
+    }
+  }
 }

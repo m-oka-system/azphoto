@@ -1,0 +1,20 @@
+{
+  "type": "ApiConnection",
+  "inputs": {
+      "host": {
+          "connection": {
+              "name": "@parameters('$connections')['teams']['connectionId']"
+          }
+      },
+      "method": "post",
+      "body": {
+          "recipient": {
+              "groupId": "${group_id}",
+              "channelId": "${channel_id}"
+          },
+          "messageBody": "<p>発生日時　　　　：@{convertFromUtc(string(triggerBody()?['data']?['essentials']?['firedDateTime']), 'Tokyo Standard Time', 'yyyy/MM/dd HH:mm:ss')}<br>\n対象リソース　　：@{triggerBody()?['data']?['essentials']?['alertTargetIDs']}<br>\nステータス　　　：@{triggerBody()?['data']?['essentials']?['monitorCondition']}<br>\n重要度　　　　　：@{triggerBody()?['data']?['essentials']?['severity']}<br>\n説明　　　　　　：@{if(equals(triggerBody()?['data']?['essentials']?['description'], ''), '-', triggerBody()?['data']?['essentials']?['description'])}<br>\n値　　　　　　　：@{if(equals(triggerBody()?['data']?['essentials']?['monitoringService'], 'Platform'), first(triggerBody()?['data']?['alertContext']?['condition']?['allOf'])?['metricValue'], '-')}</p>",
+          "subject": "@{if(equals(triggerBody()?['data']?['essentials']?['monitorCondition'], 'Fired'), '【Fired】', '【Resolved】')}@{triggerBody()?['data']?['essentials']?['alertRule']}"
+      },
+      "path": "/beta/teams/conversation/message/poster/@{encodeURIComponent('User')}/location/@{encodeURIComponent('Channel')}"
+  }
+}

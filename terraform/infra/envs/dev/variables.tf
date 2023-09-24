@@ -852,7 +852,10 @@ variable "application_insights" {
 }
 
 variable "microsoft_teams" {
-  type = map(string)
+  type = object({
+    group_id   = string
+    channel_id = string
+  })
 }
 
 variable "action_group" {

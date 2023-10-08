@@ -58,6 +58,7 @@ jobs:
         uses: haythem/public-ip@v1.2
 
       - name: Check if KeyVault exists
+        continue-on-error: true
         uses: azure/CLI@v1
         with:
           azcliversion: ${{ env.azcli_verion }}

@@ -58,6 +58,7 @@ jobs:
         uses: haythem/public-ip@v1.2
 
       - name: Check if KeyVault exists
+        id: check_if_keyvault_exists
         continue-on-error: true
         uses: azure/CLI@v1
         with:
@@ -71,7 +72,7 @@ jobs:
             fi
 
       - name: Add runner's Public IP to KeyVault Firewall
-        if: ${{ needs.terraform.outputs.keyvault_exists }} == 'true'
+        if: ${{ steps.check_if_keyvault_exists.outputs.keyvault_exists }} == 'true'
         uses: azure/CLI@v1
         with:
           azcliversion: ${{ env.azcli_verion }}
@@ -156,7 +157,7 @@ jobs:
           ARM_USE_OIDC: true
 
       - name: Remove runner's Public IP from KeyVault Firewall
-        if: ${{ needs.terraform.outputs.keyvault_exists }} == 'true'
+        if: ${{ steps.check_if_keyvault_exists.outputs.keyvault_exists }} == 'true'
         uses: azure/CLI@v1
         with:
           azcliversion: ${{ env.azcli_verion }}

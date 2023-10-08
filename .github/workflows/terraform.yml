@@ -64,15 +64,10 @@ jobs:
         with:
           azcliversion: ${{ env.azcli_verion }}
           inlineScript: |
-            EXISTS=$(az keyvault show --name ${{ secrets.KEYVAULT_NAME }} --query "name" --output tsv)
-            if [ x = x$EXISTS ]; then
-              echo "keyvault_exists=false" >> $GITHUB_OUTPUT
-            else
-              echo "keyvault_exists=true" >> $GITHUB_OUTPUT
-            fi
+            az keyvault show --name ${{ secrets.KEYVAULT_NAME }} --query "name" --output tsv
 
       - name: Add runner's Public IP to KeyVault Firewall
-        if: ${{ steps.check_if_keyvault_exists.outputs.keyvault_exists }} == 'true'
+        if: steps.check_if_keyvault_exists.outcome == 'success'
         uses: azure/CLI@v1
         with:
           azcliversion: ${{ env.azcli_verion }}
@@ -157,7 +152,7 @@ jobs:
           ARM_USE_OIDC: true
 
       - name: Remove runner's Public IP from KeyVault Firewall
-        if: ${{ steps.check_if_keyvault_exists.outputs.keyvault_exists }} == 'true'
+        if: steps.check_if_keyvault_exists.outcome == 'success'
         uses: azure/CLI@v1
         with:
           azcliversion: ${{ env.azcli_verion }}

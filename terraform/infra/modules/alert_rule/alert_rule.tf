@@ -7,7 +7,7 @@ data "azurerm_managed_api" "teams" {
 }
 
 resource "azurerm_api_connection" "teams" {
-  name                = "teams"
+  name                = "${var.common.prefix}-${var.common.env}-teams"
   resource_group_name = var.resource_group_name
   managed_api_id      = data.azurerm_managed_api.teams.id
   display_name        = "Azure Monitor Account"

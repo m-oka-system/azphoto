@@ -27,22 +27,22 @@ locals {
   private_endpoint = {
     blob = {
       name                           = module.storage.storage_account["app"].name
-      target_subnet                  = "pe"
-      target_private_dns_zone        = "blob"
+      subnet_id                      = module.network.subnet["pe"].id
+      private_dns_zone_ids           = [module.private_dns_zone.private_dns_zone["blob"].id]
       subresource_names              = ["blob"]
       private_connection_resource_id = module.storage.storage_account["app"].id
     }
     key_vault = {
       name                           = module.key_vault.key_vault["app"].name
-      target_subnet                  = "pe"
-      target_private_dns_zone        = "key_vault"
+      subnet_id                      = module.network.subnet["pe"].id
+      private_dns_zone_ids           = [module.private_dns_zone.private_dns_zone["key_vault"].id]
       subresource_names              = ["vault"]
       private_connection_resource_id = module.key_vault.key_vault["app"].id
     }
     redis = {
       name                           = module.redis.redis["app"].name
-      target_subnet                  = "pe"
-      target_private_dns_zone        = "redis"
+      subnet_id                      = module.network.subnet["pe"].id
+      private_dns_zone_ids           = [module.private_dns_zone.private_dns_zone["redis"].id]
       subresource_names              = ["redisCache"]
       private_connection_resource_id = module.redis.redis["app"].id
     }

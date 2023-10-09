@@ -252,3 +252,9 @@ resource "github_actions_secret" "public_key" {
   secret_name     = "PUBLIC_KEY"
   plaintext_value = var.public_key
 }
+
+resource "github_actions_secret" "keyvault_name" {
+  repository      = var.github_repo_name
+  secret_name     = "KEYVAULT_NAME"
+  plaintext_value = var.keyvault_name
+}

@@ -6,14 +6,12 @@ resource "azurerm_private_endpoint" "this" {
   name                          = "${each.value.name}-pe"
   resource_group_name           = var.resource_group_name
   location                      = var.common.location
-  subnet_id                     = var.subnet[each.value.target_subnet].id
+  subnet_id                     = each.value.subnet_id
   custom_network_interface_name = "${each.value.name}-pe-nic"
 
   private_dns_zone_group {
-    name = "default"
-    private_dns_zone_ids = [
-      var.private_dns_zone[each.value.target_private_dns_zone].id
-    ]
+    name                 = "default"
+    private_dns_zone_ids = each.value.private_dns_zone_ids
   }
 
   private_service_connection {

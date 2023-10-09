@@ -846,11 +846,12 @@ variable "application_insights" {
   }
 }
 
-variable "microsoft_teams" {
-  type = object({
-    group_id   = string
-    channel_id = string
-  })
+variable "microsoft_teams_group_id" {
+  type = string
+}
+
+variable "microsoft_teams_channel_id" {
+  type = string
 }
 
 variable "action_group" {

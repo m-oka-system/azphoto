@@ -233,10 +233,11 @@ module "diagnostic_setting" {
 module "alert_rule" {
   source = "../../modules/alert_rule"
 
-  common              = var.common
-  resource_group_name = module.resource_group.resource_group_name
-  microsoft_teams     = var.microsoft_teams
-  action_group        = var.action_group
-  metric_alert        = local.metric_alert
-  activity_log_alert  = local.activity_log_alert
+  common                     = var.common
+  resource_group_name        = module.resource_group.resource_group_name
+  microsoft_teams_group_id   = var.microsoft_teams_group_id
+  microsoft_teams_channel_id = var.microsoft_teams_channel_id
+  action_group               = var.action_group
+  metric_alert               = local.metric_alert
+  activity_log_alert         = local.activity_log_alert
 }

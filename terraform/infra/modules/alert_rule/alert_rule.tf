@@ -51,8 +51,8 @@ resource "azurerm_logic_app_action_custom" "action-post-to-teams" {
   body = templatefile(
     "${path.module}/post-to-teams.json",
     {
-      group_id   = var.microsoft_teams.group_id
-      channel_id = var.microsoft_teams.channel_id
+      group_id   = var.microsoft_teams_group_id
+      channel_id = var.microsoft_teams_channel_id
     }
   )
 }

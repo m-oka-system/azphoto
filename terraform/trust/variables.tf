@@ -74,3 +74,11 @@ variable "public_key" {
 variable "keyvault_name" {
   type = string
 }
+
+variable "microsoft_teams_group_id" {
+  type = string
+}
+
+variable "microsoft_teams_channel_id" {
+  type = string
+}

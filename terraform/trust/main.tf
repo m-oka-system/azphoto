@@ -258,3 +258,15 @@ resource "github_actions_secret" "keyvault_name" {
   secret_name     = "KEYVAULT_NAME"
   plaintext_value = var.keyvault_name
 }
+
+resource "github_actions_secret" "microsoft_teams_group_id" {
+  repository      = var.github_repo_name
+  secret_name     = "MICROSOFT_TEAMS_GROUP_ID"
+  plaintext_value = var.microsoft_teams_group_id
+}
+
+resource "github_actions_secret" "microsoft_teams_channel_id" {
+  repository      = var.github_repo_name
+  secret_name     = "MICROSOFT_TEAMS_CHANNEL_ID"
+  plaintext_value = var.microsoft_teams_channel_id
+}

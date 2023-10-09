@@ -241,3 +241,11 @@ module "alert_rule" {
   metric_alert               = local.metric_alert
   activity_log_alert         = local.activity_log_alert
 }
+
+module "private_link_scope" {
+  source = "../../modules/private_link_scope"
+
+  common                      = var.common
+  resource_group_name         = module.resource_group.resource_group_name
+  private_link_scoped_service = local.private_link_scoped_service
+}

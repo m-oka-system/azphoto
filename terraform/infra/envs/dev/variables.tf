@@ -403,6 +403,10 @@ variable "private_dns_zone" {
     blob      = "privatelink.blob.core.windows.net"
     key_vault = "privatelink.vaultcore.azure.net"
     redis     = "privatelink.redis.cache.windows.net"
+    monitor   = "privatelink.monitor.azure.com"
+    oms       = "privatelink.oms.opinsights.azure.com"
+    ods       = "privatelink.ods.opinsights.azure.com"
+    agentsvc  = "privatelink.agentsvc.azure-automation.net"
   }
 }
 

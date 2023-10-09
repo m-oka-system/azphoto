@@ -46,6 +46,19 @@ locals {
       subresource_names              = ["redisCache"]
       private_connection_resource_id = module.redis.redis["app"].id
     }
+    ampls = {
+      name      = module.private_link_scope.private_link_scope.name
+      subnet_id = module.network.subnet["pe"].id
+      private_dns_zone_ids = [
+        module.private_dns_zone.private_dns_zone["blob"].id,
+        module.private_dns_zone.private_dns_zone["monitor"].id,
+        module.private_dns_zone.private_dns_zone["oms"].id,
+        module.private_dns_zone.private_dns_zone["ods"].id,
+        module.private_dns_zone.private_dns_zone["agentsvc"].id,
+      ]
+      subresource_names              = ["azuremonitor"]
+      private_connection_resource_id = module.private_link_scope.private_link_scope.id
+    }
   }
 
   app_service = {
@@ -129,6 +142,18 @@ locals {
         operation_name = "Microsoft.Web/serverfarms/restartSites/Action"
         category       = "Administrative"
       }
+    }
+  }
+
+  # Azure Monitor Private Link Scope
+  private_link_scoped_service = {
+    logs = {
+      name               = module.log_analytics.log_analytics["logs"].name
+      linked_resource_id = module.log_analytics.log_analytics["logs"].id
+    }
+    app = {
+      name               = module.application_insights.application_insights["app"].name
+      linked_resource_id = module.application_insights.application_insights["app"].id
     }
   }
 }

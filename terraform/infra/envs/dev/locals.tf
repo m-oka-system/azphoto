@@ -90,6 +90,7 @@ locals {
 
   diagnostic_setting = {
     target_log_analytics_workspace = "logs"
+    target_storage_account         = "log"
     target_resources = merge(
       { for k, v in module.storage.storage_account : format("storage_account_%s", k) => v.id },
       { for k, v in module.storage.storage_account : format("blob_%s", k) => format("%s/blobServices/default", v.id) },

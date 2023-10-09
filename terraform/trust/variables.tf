@@ -70,3 +70,7 @@ variable "vm_admin_username" {
 variable "public_key" {
   type = string
 }
+
+variable "keyvault_name" {
+  type = string
+}

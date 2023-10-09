@@ -279,11 +279,6 @@ variable "blob_container" {
       container_name        = "media"
       container_access_type = "blob"
     }
-    log = {
-      storage_account_key   = "log"
-      container_name        = "log"
-      container_access_type = "private"
-    }
   }
 }
 

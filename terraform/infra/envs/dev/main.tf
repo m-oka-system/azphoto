@@ -227,6 +227,7 @@ module "diagnostic_setting" {
   common                  = var.common
   diagnostic_setting      = local.diagnostic_setting
   log_analytics_workspace = module.log_analytics.log_analytics
+  storage_account         = module.storage.storage_account
 }
 
 module "alert_rule" {

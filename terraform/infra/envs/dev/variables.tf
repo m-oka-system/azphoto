@@ -108,8 +108,8 @@ variable "network_security_group" {
       protocol                   = string
       source_port_range          = string
       destination_port_range     = string
-      source_address_prefix      = optional(string)
-      source_address_prefixes    = optional(list(string))
+      source_address_prefix      = string
+      source_address_prefixes    = list(string)
       destination_address_prefix = string
     }))
   }))
@@ -117,17 +117,176 @@ variable "network_security_group" {
     app = {
       name          = "app"
       target_subnet = "app"
-      security_rule = []
+      security_rule = [
+        {
+          name                       = "AllowInternetHTTPOutbound"
+          priority                   = 1000
+          direction                  = "Outbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "80"
+          source_address_prefix      = "*"
+          source_address_prefixes    = []
+          destination_address_prefix = "Internet"
+        },
+        {
+          name                       = "AllowInternetHTTPSOutbound"
+          priority                   = 1100
+          direction                  = "Outbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "443"
+          source_address_prefix      = "*"
+          source_address_prefixes    = []
+          destination_address_prefix = "Internet"
+        },
+        {
+          name                       = "AllowPESubnetAnyOutbound"
+          priority                   = 1200
+          direction                  = "Outbound"
+          access                     = "Allow"
+          protocol                   = "*"
+          source_port_range          = "*"
+          destination_port_range     = "*"
+          source_address_prefix      = "*"
+          source_address_prefixes    = []
+          destination_address_prefix = "10.10.2.0/24"
+        },
+        {
+          name                       = "AllowDBSubnetMySQLOutbound"
+          priority                   = 1300
+          direction                  = "Outbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "3306"
+          source_address_prefix      = "*"
+          source_address_prefixes    = []
+          destination_address_prefix = "10.10.3.0/24"
+        },
+        {
+          name                       = "DenyAllOutbound"
+          priority                   = 4096
+          direction                  = "Outbound"
+          access                     = "Deny"
+          protocol                   = "*"
+          source_port_range          = "*"
+          destination_port_range     = "*"
+          source_address_prefix      = "*"
+          source_address_prefixes    = []
+          destination_address_prefix = "*"
+        },
+      ]
     }
     pe = {
       name          = "pe"
       target_subnet = "pe"
-      security_rule = []
+      security_rule = [
+        {
+          name                       = "AllowAppSubnetAnyInbound"
+          priority                   = 1000
+          direction                  = "Inbound"
+          access                     = "Allow"
+          protocol                   = "*"
+          source_port_range          = "*"
+          destination_port_range     = "*"
+          source_address_prefix      = "10.10.1.0/24"
+          source_address_prefixes    = []
+          destination_address_prefix = "*"
+        },
+        {
+          name                       = "AllowVMSubnetAnyInbound"
+          priority                   = 1100
+          direction                  = "Inbound"
+          access                     = "Allow"
+          protocol                   = "*"
+          source_port_range          = "*"
+          destination_port_range     = "*"
+          source_address_prefix      = "10.10.4.0/24"
+          source_address_prefixes    = []
+          destination_address_prefix = "*"
+        },
+        {
+          name                       = "DenyAllInbound"
+          priority                   = 4096
+          direction                  = "Inbound"
+          access                     = "Deny"
+          protocol                   = "*"
+          source_port_range          = "*"
+          destination_port_range     = "*"
+          source_address_prefix      = "*"
+          source_address_prefixes    = []
+          destination_address_prefix = "*"
+        },
+        {
+          name                       = "DenyAllOutbound"
+          priority                   = 4096
+          direction                  = "Outbound"
+          access                     = "Deny"
+          protocol                   = "*"
+          source_port_range          = "*"
+          destination_port_range     = "*"
+          source_address_prefix      = "*"
+          source_address_prefixes    = []
+          destination_address_prefix = "*"
+        },
+      ]
     }
     db = {
       name          = "db"
       target_subnet = "db"
-      security_rule = []
+      security_rule = [
+        {
+          name                       = "AllowAppSubnetMySQLInbound"
+          priority                   = 1000
+          direction                  = "Inbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "3306"
+          source_address_prefix      = "10.10.1.0/24"
+          source_address_prefixes    = []
+          destination_address_prefix = "*"
+        },
+        {
+          name                       = "AllowVMSubnetMySQLInbound"
+          priority                   = 1100
+          direction                  = "Inbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "3306"
+          source_address_prefix      = "10.10.4.0/24"
+          source_address_prefixes    = []
+          destination_address_prefix = "*"
+        },
+        {
+          name                       = "DenyAllInbound"
+          priority                   = 4096
+          direction                  = "Inbound"
+          access                     = "Deny"
+          protocol                   = "*"
+          source_port_range          = "*"
+          destination_port_range     = "*"
+          source_address_prefix      = "*"
+          source_address_prefixes    = []
+          destination_address_prefix = "*"
+        },
+        {
+          name                       = "DenyAllOutbound"
+          priority                   = 4096
+          direction                  = "Outbound"
+          access                     = "Deny"
+          protocol                   = "*"
+          source_port_range          = "*"
+          destination_port_range     = "*"
+          source_address_prefix      = "*"
+          source_address_prefixes    = []
+          destination_address_prefix = "*"
+        },
+      ]
     }
     vm = {
       name          = "vm"
@@ -135,48 +294,124 @@ variable "network_security_group" {
       security_rule = [
         {
           name                       = "AllowMyIpAddressHTTPInbound"
-          priority                   = 100
+          priority                   = 1000
           direction                  = "Inbound"
           access                     = "Allow"
           protocol                   = "Tcp"
           source_port_range          = "*"
           destination_port_range     = "80"
+          source_address_prefix      = ""
           source_address_prefixes    = ["MyIP"]
           destination_address_prefix = "*"
         },
         {
           name                       = "AllowMyIpAddressHTTPSInbound"
-          priority                   = 110
+          priority                   = 1100
           direction                  = "Inbound"
           access                     = "Allow"
           protocol                   = "Tcp"
           source_port_range          = "*"
           destination_port_range     = "443"
+          source_address_prefix      = ""
           source_address_prefixes    = ["MyIP"]
           destination_address_prefix = "*"
         },
         {
           name                       = "AllowMyIpAddressSSHInbound"
-          priority                   = 120
+          priority                   = 1200
           direction                  = "Inbound"
           access                     = "Allow"
           protocol                   = "Tcp"
           source_port_range          = "*"
           destination_port_range     = "22"
+          source_address_prefix      = ""
           source_address_prefixes    = ["MyIP"]
           destination_address_prefix = "*"
         },
         {
           name                       = "AllowMyIpAddressRDPInbound"
-          priority                   = 130
+          priority                   = 1300
           direction                  = "Inbound"
           access                     = "Allow"
           protocol                   = "Tcp"
           source_port_range          = "*"
           destination_port_range     = "3389"
+          source_address_prefix      = ""
           source_address_prefixes    = ["MyIP"]
           destination_address_prefix = "*"
-        }
+        },
+        {
+          name                       = "DenyAllInbound"
+          priority                   = 4096
+          direction                  = "Inbound"
+          access                     = "Deny"
+          protocol                   = "*"
+          source_port_range          = "*"
+          destination_port_range     = "*"
+          source_address_prefix      = "*"
+          source_address_prefixes    = []
+          destination_address_prefix = "*"
+        },
+        {
+          name                       = "AllowInternetHTTPOutbound"
+          priority                   = 1000
+          direction                  = "Outbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "80"
+          source_address_prefix      = "*"
+          source_address_prefixes    = []
+          destination_address_prefix = "Internet"
+        },
+        {
+          name                       = "AllowInternetHTTPSOutbound"
+          priority                   = 1100
+          direction                  = "Outbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "443"
+          source_address_prefix      = "*"
+          source_address_prefixes    = []
+          destination_address_prefix = "Internet"
+        },
+        {
+          name                       = "AllowPESubnetAnyOutbound"
+          priority                   = 1200
+          direction                  = "Outbound"
+          access                     = "Allow"
+          protocol                   = "*"
+          source_port_range          = "*"
+          destination_port_range     = "*"
+          source_address_prefix      = "*"
+          source_address_prefixes    = []
+          destination_address_prefix = "10.10.2.0/24"
+        },
+        {
+          name                       = "AllowDBSubnetMySQLOutbound"
+          priority                   = 1300
+          direction                  = "Outbound"
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_port_range          = "*"
+          destination_port_range     = "3306"
+          source_address_prefix      = "*"
+          source_address_prefixes    = []
+          destination_address_prefix = "10.10.3.0/24"
+        },
+        {
+          name                       = "DenyAllOutbound"
+          priority                   = 4096
+          direction                  = "Outbound"
+          access                     = "Deny"
+          protocol                   = "*"
+          source_port_range          = "*"
+          destination_port_range     = "*"
+          source_address_prefix      = "*"
+          source_address_prefixes    = []
+          destination_address_prefix = "*"
+        },
       ]
     }
   }

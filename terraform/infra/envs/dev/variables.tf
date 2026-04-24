@@ -421,7 +421,7 @@ variable "dns" {
   type = map(map(string))
   default = {
     app = {
-      dns_zone_name = "azphoto.xyz"
+      dns_zone_name = "az-learn.com"
       subdomain     = "www"
     }
   }
